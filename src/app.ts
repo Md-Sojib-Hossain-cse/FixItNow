@@ -2,6 +2,7 @@ import express, { type Application, type Request, type Response } from "express"
 import cors from "cors"
 import config from "./config"
 import cookieParser from "cookie-parser"
+import { notFound } from "./middlewares/notFound"
 
 const app : Application = express()
 
@@ -18,6 +19,8 @@ app.get("/" , async(req : Request , res : Response) => {
         message : "Welcome to FixItNow!"
     })
 })
+
+app.use(notFound)
 
 
 export default app;
