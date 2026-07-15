@@ -4,10 +4,11 @@ model Category{
     slug String @db.VarChar(255) @unique
     description String?
     icon String?
+    isDeleted Boolean? @default(false)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    service Service[]
+    services Service[]
     
     @@map("categories")
 }

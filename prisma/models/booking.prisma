@@ -4,11 +4,10 @@ model Booking{
     customer User @relation(fields : [customerId] , references : [id])
     customerId String
     service Service @relation(fields : [serviceId] , references : [id])
-    serviceId String @unique
+    serviceId String
     availability Availability @relation(fields : [availabilityId] , references : [id])
     availabilityId String @unique
 
-    bookingDate DateTime
     address String
     note String?
     totalPrice Decimal @db.Decimal(8,2)

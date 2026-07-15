@@ -4,7 +4,7 @@ model TechnicianProfile{
     userId String @unique
     bio String?
     experienceYears Int? @default(0)
-    hourlyRate Int
+    hourlyRate Decimal @db.Decimal(8,2)
     location String?
     averageRating Decimal? @default(0.0) @db.Decimal(8,2)
     totalReviews Int? @default(0)
@@ -12,9 +12,9 @@ model TechnicianProfile{
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    service Service[]
+    services Service[]
     availability Availability[]
-    review Review[]
+    reviews Review[]
 
     @@map("technicianProfiles")
 }

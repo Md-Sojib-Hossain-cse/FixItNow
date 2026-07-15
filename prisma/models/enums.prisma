@@ -32,12 +32,12 @@ enum PaymentProvider{
     SSLCOMMERZ
 }
 
-enum WeekDay{
-    SATURDAY
-    SUNDAY
-    MONDAY
-    TUESDAY
-    WEDNESDAY
-    THURSDAY
-    FRIDAY
-}
+// enum WeekDay{
+//     SATURDAY
+//     SUNDAY
+//     MONDAY
+//     TUESDAY
+//     WEDNESDAY
+//     THURSDAY
+//     FRIDAY
+// }

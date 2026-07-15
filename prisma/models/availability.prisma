@@ -2,7 +2,7 @@ model Availability{
     id String @id @default(uuid())
     technicianProfile TechnicianProfile @relation(fields : [technicianProfileId] , references : [id])
     technicianProfileId String
-    day WeekDay
+    day DateTime
     startTime DateTime
     endTime DateTime
     isBooked Boolean @default(false)

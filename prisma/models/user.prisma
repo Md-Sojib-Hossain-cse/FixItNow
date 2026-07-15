@@ -6,14 +6,14 @@ model User{
     phone String? @db.VarChar(100) @unique
     avatar String?
     address String?
-    role Roles? @default(CUSTOMER)
+    role Roles @default(CUSTOMER)
     status UserStatus @default(ACTIVE)
     isDeleted Boolean @default(false)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt()
 
     technicianProfile TechnicianProfile?
-    booking Booking[]
-    review Review[]
+    bookings Booking[]
+    reviews Review[]
     @@map("users")
 }

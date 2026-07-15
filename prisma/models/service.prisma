@@ -8,11 +8,13 @@ model Service{
     title String
     price Decimal 
     duration Int
+    description String?
     isActive Boolean? @default(true)
+    isDeleted Boolean? @default(false)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    booking Booking?
+    bookings Booking[]
 
     @@map("services")
 }
