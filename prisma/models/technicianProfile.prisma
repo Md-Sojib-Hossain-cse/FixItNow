@@ -6,10 +6,13 @@ model TechnicianProfile{
     experienceYears Int? @default(0)
     hourlyRate Int
     location String?
-    averageRating Decimal? @default(0.0)
+    averageRating Decimal? @default(0.0) @db.Decimal(8,2)
     totalReviews Int? @default(0)
     isAvailable Boolean @default(true)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    service Service[]
+
     @@map("technicianProfiles")
 }

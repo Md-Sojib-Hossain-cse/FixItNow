@@ -1,0 +1,16 @@
+model Service{
+    id String @id @default(uuid())
+    technicianProfile TechnicianProfile @relation(fields : [technicianProfileId] , references : [id])
+    technicianProfileId String
+    category Category @relation(fields : [categoryId] , references : [id])
+    categoryId String
+
+    title String
+    price Decimal 
+    duration Int
+    isActive Boolean? @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("services")
+}
