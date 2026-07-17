@@ -9,7 +9,9 @@ router.post("/register" , authController.registerUser)
 
 router.post("/login" , authController.loginUser)
 
-router.post("/refresh-token" , authController.refreshToken)
+router.post("/refresh-token" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN), authController.refreshToken)
+
+router.post("/logout" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN), authController.loginUser)
 
 
 router.get("/me" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN), authController.getMyUserInfo )

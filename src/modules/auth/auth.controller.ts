@@ -81,6 +81,7 @@ const refreshToken = catchAsync(async (req : Request , res : Response , next : N
         maxAge : 1000 * 60 * 60 * 24 //24 hour
     })
 
+
     sendResponse(res , {
         success : true, 
         statusCode : httpStatus.OK,
@@ -89,9 +90,33 @@ const refreshToken = catchAsync(async (req : Request , res : Response , next : N
     })
 } )
 
+
+const logout = catchAsync(async (req : Request , res : Response , next : NextFunction) => {
+    res.cookie("accessToken" , {
+        httpOnly : true,
+        secure : false,
+        sameSite : "lax",
+        maxAge : 0 
+    })
+
+    res.cookie("refreshToken" , {
+        httpOnly : true,
+        secure : false,
+        sameSite : "lax",
+        maxAge : 0 
+    })
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "User logged out successfully!"
+    })
+})
+
 export const authController = {
     registerUser,
     loginUser,
     getMyUserInfo,
-    refreshToken
+    refreshToken,
+    logout
 }
