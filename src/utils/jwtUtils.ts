@@ -5,6 +5,23 @@ const createToken =(jwtPayload : JwtPayload , secret : string , expiresIn : Sign
     return token;
 }
 
+const verifyToken = (token : string , secret : string) => {
+    try {
+        const verifiedToken = jwt.verify(token , secret)
+        return {
+            success : true , 
+            data : verifiedToken
+        }
+    } catch (error : any) {
+        console.log("Invalid token verification error :" , error)
+        return {
+            success : false,
+            data : error.message
+        }
+    }
+}
+
 export const jwtUtils = {
     createToken,
+    verifyToken
 }

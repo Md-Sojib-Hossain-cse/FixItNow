@@ -97,9 +97,18 @@ const loginUserFromDB = async (payload : TLoginUser) => {
         }
     })
 
-    if(!isUserExists || isUserExists.isDeleted === true){
+    if(!isUserExists){
         throw new AppError(httpStatus.NOT_FOUND , "User not found!")
     }
+
+    if(isUserExists.status === "BLOCKED"){
+        throw new AppError(httpStatus.UNAUTHORIZED , "Your account is blocked , please contact to support.")
+    }
+    
+    if(isUserExists.isDeleted === true){
+        throw new AppError(httpStatus.NOT_FOUND , "User has been deleted , please contact to the support!")
+    }
+
 
     const isPasswordMatched = bcrypt.compare(payload.password , isUserExists.password)
 
@@ -128,7 +137,22 @@ const loginUserFromDB = async (payload : TLoginUser) => {
     };
 }
 
+const getMyUserInfoFromDB = async (userId : string) => {
+    const result = await prisma.user.findUnique({
+        where : {
+            id : userId
+        },
+        omit : {
+            password : true
+        }
+    })
+
+    return result;
+}
+
+
 export const authService = {
     registerUserIntoDB,
-    loginUserFromDB
+    loginUserFromDB,
+    getMyUserInfoFromDB
 }
