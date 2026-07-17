@@ -150,9 +150,49 @@ const getMyUserInfoFromDB = async (userId : string) => {
     return result;
 }
 
+const refreshTokenFromDB = async(token : string) => {
+    const verifyToken = jwtUtils.verifyToken(token , config.jwt_refresh_secret)
+
+    if(!verifyToken.success){
+        throw new AppError(httpStatus.UNAUTHORIZED , "Invalid token!")
+    }
+
+    const {id} = verifyToken.data;
+
+    const user = await prisma.user.findUnique({
+        where : {
+            id : id
+        }
+    })
+
+    if(!user){
+        throw new AppError(httpStatus.NOT_FOUND , "User Not Found!")
+    }
+
+    if(user.status === "BLOCKED"){
+        throw new AppError(httpStatus.FORBIDDEN , "User is blocked , please contact to our support!")
+    }
+
+    if(user.isDeleted === true){
+        throw new AppError(httpStatus.NOT_FOUND , "User is deleted , please contact to our support!")
+    }
+
+    const jwtPayload = {
+        id : user.id,
+        name : user.name,
+        email : user.email,
+        role : user.role
+    }
+
+    const accessToken = jwtUtils.createToken(jwtPayload , config.jwt_access_secret , config.jwt_access_expired_in as SignOptions)
+
+    return {accessToken}
+}
+
 
 export const authService = {
     registerUserIntoDB,
     loginUserFromDB,
-    getMyUserInfoFromDB
+    getMyUserInfoFromDB,
+    refreshTokenFromDB
 }
