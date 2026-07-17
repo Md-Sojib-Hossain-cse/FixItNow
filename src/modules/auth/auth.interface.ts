@@ -9,3 +9,8 @@ export type TRegisterUser = {
   avatar?: string;
   role: Roles;
 };
+
+export type TLoginUser = {
+  email : string;
+  password : string;
+}

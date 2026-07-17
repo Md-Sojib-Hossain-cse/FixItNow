@@ -3,7 +3,7 @@ import { prisma } from "../../lib/prisma"
 import { type SignOptions } from "jsonwebtoken"
 import { jwtUtils } from "../../utils/jwtUtils"
 import bcrypt from "bcryptjs";
-import type { TRegisterUser } from "./auth.interface"
+import type { TLoginUser, TRegisterUser } from "./auth.interface"
 import AppError from "../../errors/appError";
 import httpStatus from "http-status"
 import { Roles } from "../../../generated/prisma/enums";
@@ -28,12 +28,14 @@ const registerUserIntoDB = async (payload : TRegisterUser) => {
   }
 })
 
+
     if(result){
         throw new AppError(
             httpStatus.CONFLICT,
             "User with this email or phone already exists."
         )
     }
+
 
     if (payload.role === Roles.ADMIN) {
     throw new AppError(
@@ -88,6 +90,45 @@ const registerUserIntoDB = async (payload : TRegisterUser) => {
     };
 }
 
+const loginUserFromDB = async (payload : TLoginUser) => {
+    const isUserExists = await prisma.user.findUnique({
+        where : {
+            email : payload.email,
+        }
+    })
+
+    if(!isUserExists || isUserExists.isDeleted === true){
+        throw new AppError(httpStatus.NOT_FOUND , "User not found!")
+    }
+
+    const isPasswordMatched = bcrypt.compare(payload.password , isUserExists.password)
+
+    if(!isPasswordMatched){
+        throw new AppError(httpStatus.UNAUTHORIZED , "Wrong credentials!")
+    }
+
+    const jwtPayload : TJwtPayload = {
+        id : isUserExists.id,
+        name : isUserExists.name,
+        email : isUserExists.email,
+        role : isUserExists.role
+    }
+
+    const accessToken = jwtUtils.createToken(jwtPayload , config.jwt_access_secret, config.jwt_access_expired_in as SignOptions)
+
+    const refreshToken = jwtUtils.createToken(jwtPayload , config.jwt_refresh_secret, config.jwt_refresh_expired_in as SignOptions)
+
+    //preventing password to go on response
+    const {password , ...userInfo} = isUserExists
+
+    return {
+        user : userInfo,
+        accessToken,
+        refreshToken
+    };
+}
+
 export const authService = {
-    registerUserIntoDB
+    registerUserIntoDB,
+    loginUserFromDB
 }

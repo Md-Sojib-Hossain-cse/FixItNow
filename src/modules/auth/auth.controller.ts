@@ -31,6 +31,20 @@ const registerUser = catchAsync(async (req : Request , res : Response , next : N
     })
 })
 
+const loginUser = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
+    const payload = req.body;
+
+    const result = await authService.loginUserFromDB(payload)
+
+    sendResponse(res , {
+        success : true, 
+        statusCode : httpStatus.OK,
+        message : "User logged in successfully!",
+        data : result
+    })
+})
+
 export const authController = {
-    registerUser
+    registerUser,
+    loginUser
 }
