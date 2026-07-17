@@ -1,4 +1,4 @@
-model Category{
+model Categories{
     id String @id @default(uuid())
     name String @db.VarChar(255) @unique
     slug String @db.VarChar(255) @unique
@@ -8,7 +8,7 @@ model Category{
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    services Service[]
+    services Services[]
     
     @@map("categories")
 }

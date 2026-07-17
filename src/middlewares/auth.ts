@@ -30,6 +30,7 @@ export const auth = (...roles : Roles[]) => {
             throw new AppError(httpStatus.UNAUTHORIZED , "You are not logged in , please logged in to access your resource!")
         }
 
+
         const verifyToken = jwtUtils.verifyToken(token , config.jwt_access_secret)
 
 
@@ -37,12 +38,14 @@ export const auth = (...roles : Roles[]) => {
             throw new AppError(httpStatus.UNAUTHORIZED , "Unauthorized access!")
         }
 
+
         const {email , name , id , role} = verifyToken.data
 
 
-        if(role.length && !role.includes(role)){
+        if(roles.length && !roles.includes(role)){
             throw new AppError(httpStatus.FORBIDDEN, "Forbidden!")
         }
+
 
         const user = await prisma.user.findUnique({
             where : {
@@ -60,9 +63,11 @@ export const auth = (...roles : Roles[]) => {
             throw new AppError(httpStatus.NOT_FOUND , "User not Exists!")
         }
 
+
         if(user.status === "BLOCKED"){
             throw new AppError(httpStatus.UNAUTHORIZED , "Your account is blocked , please contact to support.")
         }
+
 
         if(user.isDeleted === true){
             throw new AppError(httpStatus.NOT_FOUND , "Your account is deleted , please contact to support.")

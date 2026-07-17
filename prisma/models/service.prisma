@@ -1,8 +1,8 @@
-model Service{
+model Services{
     id String @id @default(uuid())
-    technicianProfile TechnicianProfile @relation(fields : [technicianProfileId] , references : [id])
+    technicianProfile TechnicianProfiles @relation(fields : [technicianProfileId] , references : [id])
     technicianProfileId String
-    category Category @relation(fields : [categoryId] , references : [id])
+    category Categories @relation(fields : [categoryId] , references : [id])
     categoryId String
 
     title String
@@ -14,7 +14,7 @@ model Service{
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    bookings Booking[]
+    bookings Bookings[]
 
     @@map("services")
 }

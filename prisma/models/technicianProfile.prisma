@@ -1,6 +1,6 @@
-model TechnicianProfile{
+model TechnicianProfiles{
     id String @id @default(uuid())
-    user User @relation(fields : [userId] , references: [id] , onDelete : Cascade)
+    user Users @relation(fields : [userId] , references: [id] , onDelete : Cascade)
     userId String @unique
     bio String?
     experienceYears Int? @default(0)
@@ -12,9 +12,9 @@ model TechnicianProfile{
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    services Service[]
+    services Services[]
     availability Availability[]
-    reviews Review[]
+    reviews Reviews[]
 
     @@map("technicianProfiles")
 }

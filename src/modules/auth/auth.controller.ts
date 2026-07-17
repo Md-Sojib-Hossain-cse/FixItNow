@@ -92,6 +92,8 @@ const refreshToken = catchAsync(async (req : Request , res : Response , next : N
 
 
 const logout = catchAsync(async (req : Request , res : Response , next : NextFunction) => {
+
+    console.log("hello")
     res.cookie("accessToken" , {
         httpOnly : true,
         secure : false,
