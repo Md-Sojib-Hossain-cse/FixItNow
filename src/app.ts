@@ -4,6 +4,7 @@ import config from "./config"
 import cookieParser from "cookie-parser"
 import { notFound } from "./middlewares/notFound"
 import { globalErrorHandler } from "./middlewares/globalErrorHandler"
+import { authRoutes } from "./modules/auth/auth.routes"
 
 const app : Application = express()
 
@@ -20,6 +21,9 @@ app.get("/" , async(req : Request , res : Response) => {
         message : "Welcome to FixItNow!"
     })
 })
+
+
+app.use("/api/auth" , authRoutes)
 
 app.use(notFound)
 

@@ -7,10 +7,10 @@ model User{
     avatar String?
     address String?
     role Roles @default(CUSTOMER)
-    status UserStatus @default(ACTIVE)
-    isDeleted Boolean @default(false)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt()
+    status UserStatus? @default(ACTIVE)
+    isDeleted Boolean? @default(false)
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @updatedAt()
 
     technicianProfile TechnicianProfile?
     bookings Booking[]
