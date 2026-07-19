@@ -1,4 +1,4 @@
-import type { Roles, UserStatus } from "../../../generated/prisma/enums";
+import type { Roles, UserStatus } from "../../../../generated/prisma/enums";
 
 export type TUserQuery = {
     status ?: UserStatus;

@@ -1,7 +1,7 @@
-import type { UsersWhereInput } from "../../../generated/prisma/models";
-import AppError from "../../errors/appError";
-import { prisma } from "../../lib/prisma";
-import type { TUpdateUserStatus, TUserQuery } from "./admin.interface";
+import type { UsersWhereInput } from "../../../../generated/prisma/models";
+import AppError from "../../../errors/appError";
+import { prisma } from "../../../lib/prisma";
+import type { TUpdateUserStatus, TUserQuery } from "./adminUser.interface";
 import httpStatus from "http-status"
 
 const getAllUsersFromDB = async (query : TUserQuery) => {
@@ -116,7 +116,9 @@ const updateUserStatusOnDB = async (adminId : string, payload : TUpdateUserStatu
 }
 
 
-export const adminService = {
+
+
+export const adminUserService = {
     getAllUsersFromDB,
     updateUserStatusOnDB
 }

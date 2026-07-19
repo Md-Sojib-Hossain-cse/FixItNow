@@ -5,7 +5,6 @@ import { userController } from "./user.controller";
 
 const router = Router()
 
-
 router.patch("/update", auth(Roles.CUSTOMER , Roles.TECHNICIAN, Roles.ADMIN), userController.updateUserInfo)
 
 export const userRoutes = router;

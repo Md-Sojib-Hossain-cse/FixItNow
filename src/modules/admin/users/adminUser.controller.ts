@@ -1,12 +1,12 @@
-import httpStatus from "http-status"
-import { catchAsync } from "../../utils/catchAsync";
 import type { NextFunction, Request, Response } from "express";
-import { adminService } from "./admin.service";
-import { sendResponse } from "../../utils/sendResponse";
+import { catchAsync } from "../../../utils/catchAsync";
+import { sendResponse } from "../../../utils/sendResponse";
+import { adminUserService } from "./adminUser.service";
+import httpStatus from "http-status"
 
 const getAllUsers = catchAsync(async(req : Request, res : Response , next : NextFunction) => {
     const query = req.query;
-    const result = await adminService.getAllUsersFromDB(query)
+    const result = await adminUserService.getAllUsersFromDB(query)
 
     sendResponse(res , {
         success : true,
@@ -20,7 +20,7 @@ const updateUserStatus = catchAsync(async(req : Request, res : Response , next :
     const adminId = req.user?.id;
     const userId = req.params.id;
     const payload = req.body;
-    const result = await adminService.updateUserStatusOnDB(adminId as string , payload , userId as string)
+    const result = await adminUserService.updateUserStatusOnDB(adminId as string , payload , userId as string)
 
     sendResponse(res , {
         success : true,
@@ -30,7 +30,7 @@ const updateUserStatus = catchAsync(async(req : Request, res : Response , next :
     })
 })
 
-export const adminController = {
+export const adminUserController = {
     getAllUsers,
     updateUserStatus
 }

@@ -1,12 +1,11 @@
 import { Router } from "express";
-import { auth } from "../../middlewares/auth";
-import { Roles } from "../../../generated/prisma/enums";
-import { adminController } from "./admin.controller";
+import { adminUserRoutes } from "./users/adminUser.routes";
+import { adminCategoryRoutes } from "./categories/adminCategories.routes";
 
 const router = Router()
 
-router.get("/users" , auth(Roles.ADMIN) , adminController.getAllUsers)
+router.use("/users" , adminUserRoutes)
 
-router.patch("/users/:id" , auth(Roles.ADMIN) , adminController.updateUserStatus)
+router.use("/categories" , adminCategoryRoutes)
 
 export const adminRoutes = router;
