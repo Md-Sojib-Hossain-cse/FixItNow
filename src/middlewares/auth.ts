@@ -47,7 +47,7 @@ export const auth = (...roles : Roles[]) => {
         }
 
 
-        const user = await prisma.user.findUnique({
+        const user = await prisma.users.findUnique({
             where : {
                 id : id,
                 name : name,
@@ -64,8 +64,8 @@ export const auth = (...roles : Roles[]) => {
         }
 
 
-        if(user.status === "BLOCKED"){
-            throw new AppError(httpStatus.UNAUTHORIZED , "Your account is blocked , please contact to support.")
+        if(user.status === "BANNED"){
+            throw new AppError(httpStatus.UNAUTHORIZED , "Your account is banned , please contact to support.")
         }
 
 

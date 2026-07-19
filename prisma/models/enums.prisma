@@ -5,8 +5,8 @@ enum Roles{
 }
 
 enum UserStatus{
-    ACTIVE
-    BLOCKED
+    BANNED
+    UNBANNED
 }
 
 enum BookingStatus{
@@ -31,13 +31,3 @@ enum PaymentProvider{
     STRIPE
     SSLCOMMERZ
 }
-
-// enum WeekDay{
-//     SATURDAY
-//     SUNDAY
-//     MONDAY
-//     TUESDAY
-//     WEDNESDAY
-//     THURSDAY
-//     FRIDAY
-// }

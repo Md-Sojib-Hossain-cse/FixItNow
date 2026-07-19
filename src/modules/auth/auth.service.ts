@@ -8,17 +8,17 @@ import AppError from "../../errors/appError";
 import httpStatus from "http-status"
 import { Roles } from "../../../generated/prisma/enums";
 import type { TJwtPayload } from "../../types";
-import type { UserWhereInput } from "../../../generated/prisma/models";
+import type { UsersWhereInput } from "../../../generated/prisma/models";
 
 const registerUserIntoDB = async (payload : TRegisterUser) => {
 
-    const orConditions : UserWhereInput[] = [{email : payload.email}];
+    const orConditions : UsersWhereInput[] = [{email : payload.email}];
 
     if(payload.phone){
         orConditions.push({phone : payload.phone})
     }
 
-    const result = await prisma.user.findFirst({
+    const result = await prisma.users.findFirst({
     where: {
         isDeleted: false,
         OR : orConditions
@@ -48,7 +48,7 @@ const registerUserIntoDB = async (payload : TRegisterUser) => {
     const hashedPassword =await bcrypt.hash(payload.password , Number(config.bcrypt_salt_round))
 
     const user = payload.role === Roles.TECHNICIAN ?
-    await prisma.user.create({
+    await prisma.users.create({
         data : {
             ...payload,
             password : hashedPassword,
@@ -61,7 +61,7 @@ const registerUserIntoDB = async (payload : TRegisterUser) => {
             password : true
         }
     })
-      : await prisma.user.create({
+      : await prisma.users.create({
         data : {
             ...payload,
             password : hashedPassword,
@@ -91,7 +91,7 @@ const registerUserIntoDB = async (payload : TRegisterUser) => {
 }
 
 const loginUserFromDB = async (payload : TLoginUser) => {
-    const isUserExists = await prisma.user.findUnique({
+    const isUserExists = await prisma.users.findUnique({
         where : {
             email : payload.email,
         }
@@ -101,8 +101,8 @@ const loginUserFromDB = async (payload : TLoginUser) => {
         throw new AppError(httpStatus.NOT_FOUND , "User not found!")
     }
 
-    if(isUserExists.status === "BLOCKED"){
-        throw new AppError(httpStatus.UNAUTHORIZED , "Your account is blocked , please contact to support.")
+    if(isUserExists.status === "BANNED"){
+        throw new AppError(httpStatus.UNAUTHORIZED , "Your account is banned , please contact to support.")
     }
     
     if(isUserExists.isDeleted === true){
@@ -138,9 +138,12 @@ const loginUserFromDB = async (payload : TLoginUser) => {
 }
 
 const getMyUserInfoFromDB = async (userId : string) => {
-    const result = await prisma.user.findUnique({
+    const result = await prisma.users.findUnique({
         where : {
             id : userId
+        },
+        include : {
+            technicianProfile : true
         },
         omit : {
             password : true
@@ -159,7 +162,7 @@ const refreshTokenFromDB = async(token : string) => {
 
     const {id} = verifyToken.data;
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findUnique({
         where : {
             id : id
         }
@@ -169,8 +172,8 @@ const refreshTokenFromDB = async(token : string) => {
         throw new AppError(httpStatus.NOT_FOUND , "User Not Found!")
     }
 
-    if(user.status === "BLOCKED"){
-        throw new AppError(httpStatus.FORBIDDEN , "User is blocked , please contact to our support!")
+    if(user.status === "BANNED"){
+        throw new AppError(httpStatus.FORBIDDEN , "User is banned , please contact to our support!")
     }
 
     if(user.isDeleted === true){

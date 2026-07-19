@@ -6,6 +6,7 @@ model Payments {
 
     transactionId String @unique
     amount Decimal @db.Decimal(1,1)
+    method String
     provider PaymentProvider
     status PaymentStatus @default(PENDING)
     paidAt DateTime?

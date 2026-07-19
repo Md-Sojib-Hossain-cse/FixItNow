@@ -2,7 +2,7 @@
 CREATE TYPE "Roles" AS ENUM ('ADMIN', 'CUSTOMER', 'TECHNICIAN');
 
 -- CreateEnum
-CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'BLOCKED');
+CREATE TYPE "UserStatus" AS ENUM ('BANNED', 'UNBANNED');
 
 -- CreateEnum
 CREATE TYPE "BookingStatus" AS ENUM ('REQUESTED', 'ACCEPTED', 'DECLINED', 'PAID', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED');
@@ -63,6 +63,7 @@ CREATE TABLE "payments" (
     "bookingId" TEXT NOT NULL,
     "transactionId" TEXT NOT NULL,
     "amount" DECIMAL(1,1) NOT NULL,
+    "method" TEXT NOT NULL,
     "provider" "PaymentProvider" NOT NULL,
     "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
     "paidAt" TIMESTAMP(3),
@@ -108,8 +109,9 @@ CREATE TABLE "technicianProfiles" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "bio" TEXT,
+    "skills" TEXT[],
     "experienceYears" INTEGER DEFAULT 0,
-    "hourlyRate" DECIMAL(8,2) NOT NULL,
+    "hourlyRate" DECIMAL(8,2),
     "location" TEXT,
     "averageRating" DECIMAL(8,2) DEFAULT 0.0,
     "totalReviews" INTEGER DEFAULT 0,
@@ -130,10 +132,10 @@ CREATE TABLE "users" (
     "avatar" TEXT,
     "address" TEXT,
     "role" "Roles" NOT NULL DEFAULT 'CUSTOMER',
-    "status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',
-    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "status" "UserStatus" DEFAULT 'UNBANNED',
+    "isDeleted" BOOLEAN DEFAULT false,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3),
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );

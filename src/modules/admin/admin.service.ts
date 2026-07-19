@@ -1,4 +1,4 @@
-import type { UserWhereInput } from "../../../generated/prisma/models";
+import type { UsersWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 import type { TUserQuery } from "./admin.interface";
 
@@ -11,8 +11,8 @@ const getAllUsersFromDB = async (query : TUserQuery) => {
     const isDeleted = query.isDeleted === "true" ? true : false;
 
 
-    const andConditions : UserWhereInput[] = []
-    const orConditions : UserWhereInput[] =[]
+    const andConditions : UsersWhereInput[] = []
+    const orConditions : UsersWhereInput[] =[]
 
     const userSearchableFields = ["name" , "email", "phone", "address"]
 
@@ -42,7 +42,7 @@ const getAllUsersFromDB = async (query : TUserQuery) => {
 
 
     const [result, total] = await Promise.all([
-        prisma.user.findMany({
+        prisma.users.findMany({
             where: {
                 AND: andConditions,
             },
@@ -56,7 +56,7 @@ const getAllUsersFromDB = async (query : TUserQuery) => {
             },
         }),
 
-        prisma.user.count({
+        prisma.users.count({
             where: {
                 AND: andConditions,
             },

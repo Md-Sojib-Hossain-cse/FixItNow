@@ -1,9 +1,0 @@
--- AlterTable
-ALTER TABLE "technicianProfiles" ALTER COLUMN "hourlyRate" DROP NOT NULL;
-
--- AlterTable
-ALTER TABLE "users" ALTER COLUMN "role" DROP NOT NULL,
-ALTER COLUMN "status" DROP NOT NULL,
-ALTER COLUMN "isDeleted" DROP NOT NULL,
-ALTER COLUMN "createdAt" DROP NOT NULL,
-ALTER COLUMN "updatedAt" DROP NOT NULL;
