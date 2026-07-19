@@ -16,6 +16,18 @@ const getAllUsers = catchAsync(async(req : Request, res : Response , next : Next
     })
 })
 
+const getSingleUser = catchAsync(async(req : Request, res : Response , next : NextFunction) => {
+    const userId = req.params.id;
+    const result = await adminUserService.getSingleUserFromDB(userId as string)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "User Info retrieve successfully!",
+        data : result
+    })
+})
+
 const updateUserStatus = catchAsync(async(req : Request, res : Response , next : NextFunction) => {
     const adminId = req.user?.id;
     const userId = req.params.id;
@@ -30,7 +42,22 @@ const updateUserStatus = catchAsync(async(req : Request, res : Response , next :
     })
 })
 
+const updateUserDeleteStatus = catchAsync(async(req : Request, res : Response , next : NextFunction) => {
+    const userId = req.params.id;
+    const payload = req.body;
+    const result = await adminUserService.updateUserDeleteStatusOnDB(userId as string ,  payload)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Users delete status successfully!",
+        data : result
+    })
+})
+
 export const adminUserController = {
     getAllUsers,
-    updateUserStatus
+    updateUserStatus,
+    getSingleUser,
+    updateUserDeleteStatus
 }

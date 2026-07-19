@@ -1,7 +1,7 @@
 import type { UsersWhereInput } from "../../../../generated/prisma/models";
 import AppError from "../../../errors/appError";
 import { prisma } from "../../../lib/prisma";
-import type { TUpdateUserStatus, TUserQuery } from "./adminUser.interface";
+import type { TUpdateUserStatus, TUserDeleteStatus, TUserQuery } from "./adminUser.interface";
 import httpStatus from "http-status"
 
 const getAllUsersFromDB = async (query : TUserQuery) => {
@@ -78,6 +78,22 @@ const getAllUsersFromDB = async (query : TUserQuery) => {
 };
 }
 
+const getSingleUserFromDB = async(userId : string) => {
+    const result = await prisma.users.findUnique({
+        where : {
+            id : userId
+        },
+        include : {
+            technicianProfile : true
+        },
+        omit : {
+            password : true
+        }
+    })
+
+    return result;
+}
+
 const updateUserStatusOnDB = async (adminId : string, payload : TUpdateUserStatus , userId : string) => {
     const user = await prisma.users.findUnique({
         where : {
@@ -115,10 +131,33 @@ const updateUserStatusOnDB = async (adminId : string, payload : TUpdateUserStatu
     return result
 }
 
+const updateUserDeleteStatusOnDB = async (userId : string , payload : TUserDeleteStatus ) => {
+    const result = await prisma.users.update({
+        where : {
+            id : userId
+        },
+        data : {
+            isDeleted : payload.isDeleted
+        },
+        include : {
+            technicianProfile : true
+        },
+        omit : {
+            password : true
+        }
+    })
+
+    return result
+}
+
+
+
 
 
 
 export const adminUserService = {
     getAllUsersFromDB,
-    updateUserStatusOnDB
+    updateUserStatusOnDB,
+    getSingleUserFromDB,
+    updateUserDeleteStatusOnDB
 }

@@ -14,3 +14,7 @@ export type TUserQuery = {
 export type TUpdateUserStatus = {
     status : UserStatus
 }
+
+export type TUserDeleteStatus = {
+    isDeleted : boolean
+}
