@@ -10,3 +10,7 @@ export type TUserQuery = {
     sortBy ?: string;
     sortOrder ?: "asc" | "desc";
 }
+
+export type TUpdateUserStatus = {
+    status : UserStatus
+}

@@ -1,6 +1,8 @@
 import type { UsersWhereInput } from "../../../generated/prisma/models";
+import AppError from "../../errors/appError";
 import { prisma } from "../../lib/prisma";
-import type { TUserQuery } from "./admin.interface";
+import type { TUpdateUserStatus, TUserQuery } from "./admin.interface";
+import httpStatus from "http-status"
 
 const getAllUsersFromDB = async (query : TUserQuery) => {
     const page = Number(query.page) || 1;
@@ -51,6 +53,9 @@ const getAllUsersFromDB = async (query : TUserQuery) => {
             orderBy: {
                 [sortBy]: sortOrder,
             },
+            include : {
+                technicianProfile : true
+            },
             omit: {
                 password: true,
             },
@@ -73,7 +78,45 @@ const getAllUsersFromDB = async (query : TUserQuery) => {
 };
 }
 
+const updateUserStatusOnDB = async (adminId : string, payload : TUpdateUserStatus , userId : string) => {
+    const user = await prisma.users.findUnique({
+        where : {
+            id : adminId
+        }
+    })
+
+    if(!user || user.isDeleted){
+        throw new AppError(httpStatus.NOT_FOUND , "User does not exists or maybe deleted ,please contact to our support!")
+    }
+
+    if(user.status === "BANNED"){
+        throw new AppError(httpStatus.UNAUTHORIZED , "User has been banned , please contact to out support!")
+    }
+
+    if(user.role !== "ADMIN"){
+        throw new AppError(httpStatus.UNAUTHORIZED , "You do not have permission to change user status!")
+    }
+
+    const result = await prisma.users.update({
+        where : {
+            id : userId
+        },
+        data : {
+            status : payload.status
+        },
+        include : {
+            technicianProfile : true
+        },
+        omit : {
+            password : true
+        }
+    })
+
+    return result
+}
+
 
 export const adminService = {
-    getAllUsersFromDB
+    getAllUsersFromDB,
+    updateUserStatusOnDB
 }
