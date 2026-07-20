@@ -1,6 +1,7 @@
+import type { ServicesWhereInput } from "../../../generated/prisma/models";
 import AppError from "../../errors/appError";
 import { prisma } from "../../lib/prisma";
-import type { TCreateService, TUpdateService } from "./service.interface";
+import type { TCreateService, TServiceQuery, TUpdateService } from "./service.interface";
 import httpStatus from "http-status"
 
 const createServiceInDB = async (userId : string  ,  payload : TCreateService) => {
@@ -28,8 +29,11 @@ const createServiceInDB = async (userId : string  ,  payload : TCreateService) =
         throw new AppError(httpStatus.NOT_FOUND , "Category does not exists!")
     }
 
+
     const result = await prisma.services.create({
-        data : payload,
+        data : {
+            ...payload
+        },
         include : {
             bookings : true,
             category : true,
@@ -86,8 +90,99 @@ const updateServiceOnDB = async (userId : string , serviceId : string, payload :
 
 }
 
+const getAllServiceFromDB = async (query :TServiceQuery) => {
+    const page = Number(query.page) || 1;
+        const limit = Number(query.limit) || 5;
+        const skip = (page -1) * limit
+        const sortBy = query.sortBy || "createdAt";
+        const sortOrder = query.sortOrder || "desc";
+        const minPrice = query.minPrice || 0;
+    
+    
+        const andConditions : ServicesWhereInput[] = []
+        const orConditions : ServicesWhereInput[] =[]
+    
+        const serviceSearchableFields = [ "title", "description"]
+
+    if(query.category){
+        andConditions.push({
+            category : {
+                name : query.category,
+            }
+        })
+    }
+
+    if(query.maxPrice){
+        andConditions.push({
+            price: {
+                gte : Number(minPrice),
+                lte : Number(query.maxPrice)
+            }
+        })
+    }else {
+        andConditions.push({
+            price: {
+                gte : Number(minPrice)
+            }
+        })
+    }
+
+    if(query.searchTerm){
+        serviceSearchableFields.forEach((field : string) => {
+        orConditions.push({
+            [field] : {
+                contains : query.searchTerm,
+                mode : "insensitive"
+            }
+        })
+    })
+
+    andConditions.push({
+        OR : orConditions
+    })
+    }
+    
+    andConditions.push({
+        isDeleted: false
+    });
+
+
+        const [result, total] = await Promise.all([
+    prisma.services.findMany({
+        where: {
+            AND: andConditions,
+        },
+        include: {
+            category: true,
+            technicianProfile: true,
+        },
+        orderBy: {
+            [sortBy]: sortOrder,
+        },
+        skip,
+        take: limit,
+    }),
+    prisma.services.count({
+        where: {
+            AND: andConditions,
+        },
+    }),
+])
+
+    return {
+    meta: {
+        page,
+        limit,
+        total
+    },
+    data: result
+};
+
+}
+
 
 export const servicesService = {
     createServiceInDB,
-    updateServiceOnDB
+    updateServiceOnDB,
+    getAllServiceFromDB
 }

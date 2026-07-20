@@ -6,7 +6,7 @@ model Services{
     categoryId String
 
     title String
-    price Decimal 
+    price Decimal @db.Decimal(8,2)
     durationInHour Int
     description String?
     isActive Boolean? @default(true)

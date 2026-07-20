@@ -17,3 +17,15 @@ export type TUpdateService = {
   description?: string;
   isActive?: boolean;
 };
+
+
+export type TServiceQuery = {
+    category ?: string;
+    minPrice ?: number;
+    maxPrice ?: number;
+    searchTerm ?: string;
+    page ?: number;
+    limit ?: number;
+    sortBy ?: "title" | "createdAt" | "price";
+    sortOrder ?: "asc" | "desc";
+}

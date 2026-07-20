@@ -9,4 +9,6 @@ router.post("/" , auth(Roles.TECHNICIAN) , serviceController.createService)
 
 router.patch("/:id" , auth(Roles.TECHNICIAN) , serviceController.updateService)
 
+router.get("/", serviceController.getAllServices)
+
 export const serviceRoutes = router;

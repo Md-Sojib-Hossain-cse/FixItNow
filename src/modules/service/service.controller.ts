@@ -33,8 +33,22 @@ const updateService = catchAsync(async (req : Request, res : Response , next : N
     })
 })
 
+const getAllServices = catchAsync(async (req : Request, res : Response , next : NextFunction) => {
+    const query = req.query;
+
+    const result = await servicesService.getAllServiceFromDB(query)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Services retrieve successfully!",
+        data : result
+    })
+})
+
 
 export const serviceController = {
     createService,
-    updateService
+    updateService,
+    getAllServices
 }
