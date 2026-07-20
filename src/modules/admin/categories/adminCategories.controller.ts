@@ -18,7 +18,7 @@ const createCategory = catchAsync(async(req : Request , res : Response , next : 
 
 const getAllCategory = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
     const query = req.query;
-    const result = await adminCategoryService.getAllCategories(query)
+    const result = await adminCategoryService.getAllCategoriesFromDB(query)
 
     sendResponse(res , {
         success : true, 
@@ -28,8 +28,21 @@ const getAllCategory = catchAsync(async(req : Request , res : Response , next : 
     })
 })
 
+const deleteCategory = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
+    const categoryId = req.params.id;
+    await adminCategoryService.deleteCategoryFromDB(categoryId as string)
+
+    sendResponse(res , {
+        success : true, 
+        statusCode : httpStatus.OK,
+        message : "Categories deleted successfully!",
+        data : null
+    })
+})
+
 
 export const adminCategoryController = {
     createCategory,
-    getAllCategory
+    getAllCategory,
+    deleteCategory
 }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { technicianProfileController } from "./technicianProfile.controller";
+import { technicianProfileController } from "./technician.controller";
 import { auth } from "../../middlewares/auth";
 import { Roles } from "../../../generated/prisma/enums";
 
@@ -7,6 +7,6 @@ const router = Router()
 
 router.patch("/status" , auth(Roles.TECHNICIAN), technicianProfileController.updateAvailableStatus)
 
-router.patch("/" , auth(Roles.TECHNICIAN), technicianProfileController.updateOwnTechnicianProfile)
+router.put("/profile" , auth(Roles.TECHNICIAN), technicianProfileController.updateOwnTechnicianProfile)
 
-export const technicianProfileRoutes = router;
+export const technicianRoutes = router;

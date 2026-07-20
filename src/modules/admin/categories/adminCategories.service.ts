@@ -14,7 +14,7 @@ const createCategoryIntoDB = async (payload : TCreateCategory) => {
     return result;
 }
 
-const getAllCategories = async (query : TCategoryQuery) => {
+const getAllCategoriesFromDB = async (query : TCategoryQuery) => {
     const page = Number(query.page) || 1;
     const limit = Number(query.limit) || 5;
     const skip = (page -1) * limit
@@ -75,7 +75,21 @@ const getAllCategories = async (query : TCategoryQuery) => {
     };
 }
 
+const deleteCategoryFromDB = async(categoryId : string) => {
+    const result = await prisma.categories.update({
+        where : {
+            id : categoryId
+        }, 
+        data : {
+            isDeleted : true
+        }
+    })
+
+    return result;
+}
+
 export const adminCategoryService = {
     createCategoryIntoDB,
-    getAllCategories
+    getAllCategoriesFromDB,
+    deleteCategoryFromDB
 }

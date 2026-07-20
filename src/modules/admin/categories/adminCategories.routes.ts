@@ -9,4 +9,6 @@ router.post("/" , auth(Roles.ADMIN) , adminCategoryController.createCategory)
 
 router.get("/" , auth(Roles.ADMIN) , adminCategoryController.getAllCategory)
 
+router.delete("/:id" , auth(Roles.ADMIN) , adminCategoryController.deleteCategory)
+
 export const adminCategoryRoutes = router;

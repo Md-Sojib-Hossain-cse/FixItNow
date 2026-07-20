@@ -1,12 +1,18 @@
 import { prisma } from "../../lib/prisma";
-import type { TUpdateAvailabilityStatus, TUpdateTechnicianProfile } from "./technicianProfile.interface";
+import type { TUpdateAvailabilityStatus, TUpdateTechnicianProfile } from "./technician.interface";
 
 const updateOwnTechnicianProfileOnDB = async (userId : string , payload : TUpdateTechnicianProfile) => {
     const result = await prisma.technicianProfiles.update({
         where : {
             userId
         },
-        data : payload
+        data : payload,
+        include : {
+            availability : true,
+            reviews : true,
+            services : true,
+            user : true
+        }
     })
 
     return result;
@@ -19,6 +25,11 @@ const updateAvailableStatusOnDB = async(userId : string , payload : TUpdateAvail
         },
         data : {
             isAvailable : payload.isAvailable
+        },
+        include : {
+            availability : true,
+            reviews : true,
+            services : true,
         }
     })
 

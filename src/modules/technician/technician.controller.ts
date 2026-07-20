@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../../utils/catchAsync";
-import { technicianProfileService } from "./technicianProfile.service";
+import { technicianProfileService } from "./technician.service";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status"
 
