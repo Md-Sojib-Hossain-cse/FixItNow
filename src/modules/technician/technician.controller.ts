@@ -32,7 +32,21 @@ const updateAvailableStatus = catchAsync(async(req : Request , res : Response , 
     })
 })
 
+const getAllTechnician = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
+    const query = req.query;
+
+    const result = await technicianProfileService.getAllTechnicianFromDB(query)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Technicians retrieve Successfully!",
+        data : result
+    })
+})
+
 export const technicianProfileController = {
     updateOwnTechnicianProfile , 
-    updateAvailableStatus
+    updateAvailableStatus,
+    getAllTechnician
 }

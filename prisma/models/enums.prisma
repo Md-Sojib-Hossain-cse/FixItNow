@@ -9,6 +9,11 @@ enum UserStatus{
     UNBANNED
 }
 
+enum ServiceTypes{
+    ONLINE
+    OFFLINE
+}
+
 enum BookingStatus{
     REQUESTED
     ACCEPTED

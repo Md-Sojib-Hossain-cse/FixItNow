@@ -9,4 +9,6 @@ router.patch("/status" , auth(Roles.TECHNICIAN), technicianProfileController.upd
 
 router.put("/profile" , auth(Roles.TECHNICIAN), technicianProfileController.updateOwnTechnicianProfile)
 
+router.get("/" , technicianProfileController.getAllTechnician)
+
 export const technicianRoutes = router;

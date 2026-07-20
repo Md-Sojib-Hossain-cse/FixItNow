@@ -45,6 +45,7 @@ const createServiceInDB = async (userId : string  ,  payload : TCreateService) =
 }
 
 const updateServiceOnDB = async (userId : string , serviceId : string, payload : TUpdateService) => {
+    const {categoryId , ...rest} = payload
     const technician = await prisma.technicianProfiles.findUnique({
         where : {
             userId
@@ -73,7 +74,16 @@ const updateServiceOnDB = async (userId : string , serviceId : string, payload :
         where : {
             id : serviceId
         },
-        data : payload,
+        data : {
+            ...rest,
+            ...(categoryId && {
+                category: {
+                    connect: {
+                        id: categoryId,
+                    },
+                },
+        }),
+        },
         include : {
             bookings : true,
             technicianProfile : true,
@@ -89,6 +99,7 @@ const updateServiceOnDB = async (userId : string , serviceId : string, payload :
     return result;
 
 }
+
 
 const getAllServiceFromDB = async (query :TServiceQuery) => {
     const page = Number(query.page) || 1;
@@ -110,6 +121,16 @@ const getAllServiceFromDB = async (query :TServiceQuery) => {
                 name : query.category,
             }
         })
+    }
+
+    if(query.type){
+        andConditions.push({type : query.type})
+    }
+
+    if(query.rating){
+        andConditions.push({rating : {
+            gte : query.rating
+        }})
     }
 
     if(query.maxPrice){

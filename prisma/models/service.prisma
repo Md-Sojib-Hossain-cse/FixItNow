@@ -9,6 +9,8 @@ model Services{
     price Decimal @db.Decimal(8,2)
     durationInHour Int
     description String?
+    rating Decimal? @db.Decimal(2,1) @default(0.0)
+    type ServiceTypes? @default(OFFLINE)
     isActive Boolean? @default(true)
     isDeleted Boolean? @default(false)
     createdAt DateTime @default(now())
