@@ -7,4 +7,6 @@ const router = Router()
 
 router.post("/" , auth(Roles.TECHNICIAN), availabilityController.createAvailability)
 
+router.patch("/:id" , auth(Roles.TECHNICIAN), availabilityController.updateAvailability)
+
 export const availabilityRoutes = router;

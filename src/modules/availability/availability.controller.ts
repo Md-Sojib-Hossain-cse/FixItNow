@@ -12,13 +12,29 @@ const createAvailability = catchAsync(async (req : Request , res : Response , ne
 
     sendResponse(res , {
         success : true,
-        statusCode : httpStatus.OK,
+        statusCode : httpStatus.CREATED,
         message : "Availability slot created successfully!",
+        data : result
+    })
+})
+
+const updateAvailability = catchAsync(async (req : Request , res : Response , next : NextFunction)=> {
+    const userId = req.user?.id;
+    const availabilityId = req.params.id;
+    const payload =  req.body;
+
+    const result = await availabilityService.updateAvailabilityOnDB(userId as string , availabilityId as string, payload)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Availability slot updated successfully!",
         data : result
     })
 })
 
 
 export const availabilityController = {
-    createAvailability
+    createAvailability,
+    updateAvailability
 }
