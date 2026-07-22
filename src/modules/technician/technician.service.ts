@@ -37,7 +37,6 @@ const updateAvailableStatusOnDB = async(userId : string , payload : TUpdateAvail
     return result;
 }
 
-
 const getAllTechnicianFromDB = async (query : TTechnicianQuery) => {
     const page = Number(query.page) || 1;
     const limit = Number(query.limit) || 5;
@@ -151,9 +150,30 @@ const getAllTechnicianFromDB = async (query : TTechnicianQuery) => {
     };
 }
 
+const getTechnicianProfileWithReviewsFromDB = async (id : string) => {
+    const result = await prisma.technicianProfiles.findUnique({
+        where : {
+            id
+        },
+        include : {
+            availability : true,
+            reviews : true,
+            services : true,
+            user : {
+                omit : {
+                    password : true
+                }
+            }
+        }
+    })
+
+    return result;
+}
+
 
 export const technicianProfileService = {
     updateOwnTechnicianProfileOnDB,
     updateAvailableStatusOnDB,
-    getAllTechnicianFromDB
+    getAllTechnicianFromDB,
+    getTechnicianProfileWithReviewsFromDB
 }

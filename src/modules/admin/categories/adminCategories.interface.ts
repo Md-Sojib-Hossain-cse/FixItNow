@@ -7,6 +7,13 @@ export type TCreateCategory = {
     icon ?: string;
 }
 
+export type TUpdateCategory = {
+    name ?: string;
+    slug ?: string;
+    description ?: string;
+    icon ?: string;
+}
+
 export type TCategoryQuery = {
         isDeleted ?: string;
         searchTerm ?: string;

@@ -11,4 +11,6 @@ router.put("/profile" , auth(Roles.TECHNICIAN), technicianProfileController.upda
 
 router.get("/" , technicianProfileController.getAllTechnician)
 
+router.get("/:id" , technicianProfileController.getTechnicianProfileWithReviews)
+
 export const technicianRoutes = router;

@@ -1,6 +1,6 @@
 import type { CategoriesWhereInput } from "../../../../generated/prisma/models";
 import { prisma } from "../../../lib/prisma";
-import type { TCategoryQuery, TCreateCategory } from "./adminCategories.interface";
+import type { TCategoryQuery, TCreateCategory, TUpdateCategory } from "./adminCategories.interface";
 
 const createCategoryIntoDB = async (payload : TCreateCategory) => {
     if(!payload.slug){
@@ -75,6 +75,29 @@ const getAllCategoriesFromDB = async (query : TCategoryQuery) => {
     };
 }
 
+const updateCategoryOnDB = async(categoryId : string , payload : TUpdateCategory) => {
+    let slug : string;
+    const organizedPayload = {...payload}
+
+    if(payload.name){
+        slug = payload.name.split(" ").join("_")
+
+        organizedPayload.slug = slug
+    }
+
+    const result = await prisma.categories.update({
+        where : {
+            id : categoryId
+        },
+        data : {
+            ...organizedPayload
+        }
+    })
+
+    return result;
+}
+
+
 const deleteCategoryFromDB = async(categoryId : string) => {
     const result = await prisma.categories.update({
         where : {
@@ -91,5 +114,6 @@ const deleteCategoryFromDB = async(categoryId : string) => {
 export const adminCategoryService = {
     createCategoryIntoDB,
     getAllCategoriesFromDB,
-    deleteCategoryFromDB
+    deleteCategoryFromDB,
+    updateCategoryOnDB
 }

@@ -28,6 +28,19 @@ const getAllCategory = catchAsync(async(req : Request , res : Response , next : 
     })
 })
 
+const updateCategory = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
+    const categoryId = req.params.id;
+    const payload = req.body;
+    await adminCategoryService.updateCategoryOnDB(categoryId as string , payload)
+
+    sendResponse(res , {
+        success : true, 
+        statusCode : httpStatus.OK,
+        message : "Categories updated successfully!",
+        data : null
+    })
+})
+
 const deleteCategory = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
     const categoryId = req.params.id;
     await adminCategoryService.deleteCategoryFromDB(categoryId as string)
@@ -44,5 +57,6 @@ const deleteCategory = catchAsync(async(req : Request , res : Response , next : 
 export const adminCategoryController = {
     createCategory,
     getAllCategory,
-    deleteCategory
+    deleteCategory,
+    updateCategory
 }

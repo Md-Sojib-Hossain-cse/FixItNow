@@ -9,6 +9,8 @@ import { userRoutes } from "./modules/user/user.routes"
 import { adminRoutes } from "./modules/admin/admin.routes"
 import { technicianRoutes } from "./modules/technician/technician.routes"
 import { serviceRoutes } from "./modules/service/service.routes"
+import { categoryRoutes } from "./modules/category/category.routes"
+import { availabilityRoutes } from "./modules/availability/availability.routes"
 
 const app : Application = express()
 
@@ -32,6 +34,8 @@ app.use("/api/admin" , adminRoutes)
 app.use("/api/user", userRoutes)
 app.use("/api/technician" , technicianRoutes)
 app.use("/api/service" , serviceRoutes)
+app.use("/api/categories" , categoryRoutes)
+app.use("/api/availability" , availabilityRoutes)
 
 app.use(notFound)
 
