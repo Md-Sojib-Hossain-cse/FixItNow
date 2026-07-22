@@ -11,4 +11,8 @@ router.patch("/:id" , auth(Roles.TECHNICIAN), availabilityController.updateAvail
 
 router.delete("/:id" , auth(Roles.TECHNICIAN), availabilityController.deleteAvailability)
 
+router.get("/" , availabilityController.getAllAvailability)
+
+router.get("/:id" , availabilityController.getSingleAvailability)
+
 export const availabilityRoutes = router;

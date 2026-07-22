@@ -180,7 +180,6 @@ const deleteAvailabilityFromDB = async (userId : string , availabilityId : strin
 
 }
 
-
 const getAllAvailabilityFromDB = async (query : TAvailabilityQuery) => {
     const page = Number(query.page) || 1;
     const limit = Number(query.limit) || 5;
@@ -188,30 +187,11 @@ const getAllAvailabilityFromDB = async (query : TAvailabilityQuery) => {
     const sortBy = query.sortBy || "createdAt";
     const sortOrder = query.sortOrder || "desc";
         
-        
     const andConditions : AvailabilityWhereInput[] = []
-    const orConditions : AvailabilityWhereInput[] =[]
-        
-    const availabilitySearchableFields = ["day" , "startTime", "endTime"]
         
     andConditions.push({
         isDeleted: false
     });
-    
-    if(query.searchTerm){
-        availabilitySearchableFields.forEach((field : string) => {
-            orConditions.push({
-                [field] : {
-                            contains : query.searchTerm,
-                            mode : "insensitive"
-                        }
-            })
-        })
-    
-    andConditions.push({
-            OR : orConditions
-        })
-    }
 
     if (query.day) {
         const startOfDay = new Date(query.day);
@@ -224,22 +204,6 @@ const getAllAvailabilityFromDB = async (query : TAvailabilityQuery) => {
             day: {
                 gte: startOfDay,
                 lte: endOfDay,
-            },
-        });
-    }
-
-    if(query.startTime){
-        andConditions.push({
-            startTime : {
-                gte : new Date(query.startTime)
-            }
-        })
-    }
-
-    if(query.endTime){
-        andConditions.push({
-            endTime: {
-                lte: new Date(query.endTime),
             },
         });
     }
@@ -272,11 +236,27 @@ const getAllAvailabilityFromDB = async (query : TAvailabilityQuery) => {
         };
 }
 
+const getSingleAvailabilityFromDB = async(id : string) => {
+    const result = await prisma.availability.findUnique({
+        where : {
+            id ,
+            isDeleted : false
+        },
+        include : {
+            booking : true,
+            technicianProfile : true
+        }
+    })
+
+    return result;
+}
+
 
 
 export const availabilityService = {
     createAvailabilityOnDB,
     updateAvailabilityOnDB,
     deleteAvailabilityFromDB,
-    getAllAvailabilityFromDB
+    getAllAvailabilityFromDB,
+    getSingleAvailabilityFromDB
 }

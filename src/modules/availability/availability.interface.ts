@@ -13,8 +13,6 @@ export type TUpdateAvailability = {
 
 export type TAvailabilityQuery = {
     day ?: Date;
-    startTime ?: Date;
-    endTime ?: Date;
     searchTerm ?: string;
     limit ?: number;
     page ?:number;

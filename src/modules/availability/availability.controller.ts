@@ -47,9 +47,37 @@ const deleteAvailability = catchAsync(async (req : Request , res : Response , ne
     })
 })
 
+const getAllAvailability = catchAsync(async (req : Request , res : Response , next : NextFunction)=> {
+    const query = req.query;
+
+    const result  = await availabilityService.getAllAvailabilityFromDB(query)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Availability slots retrieve successfully!",
+        data : result
+    })
+})
+
+const getSingleAvailability = catchAsync(async (req : Request , res : Response , next : NextFunction)=> {
+    const id = req.params.id;
+
+    const result  = await availabilityService.getSingleAvailabilityFromDB(id as string)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Availability slot retrieve successfully!",
+        data : result
+    })
+})
+
 
 export const availabilityController = {
     createAvailability,
     updateAvailability,
-    deleteAvailability
+    deleteAvailability,
+    getAllAvailability,
+    getSingleAvailability
 }
