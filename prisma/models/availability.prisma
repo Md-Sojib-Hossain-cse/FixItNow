@@ -6,6 +6,7 @@ model Availability{
     startTime DateTime
     endTime DateTime
     isBooked Boolean @default(false)
+    isDeleted Boolean @default(false)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 

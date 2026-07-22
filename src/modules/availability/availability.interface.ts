@@ -10,3 +10,14 @@ export type TUpdateAvailability = {
     startTime ?: Date;
     endTime ?: Date;
 }
+
+export type TAvailabilityQuery = {
+    day ?: Date;
+    startTime ?: Date;
+    endTime ?: Date;
+    searchTerm ?: string;
+    limit ?: number;
+    page ?:number;
+    sortBy ?: "day" | "startTime" | "endTime" | "createdAt";
+    sortOrder ?: "asc" | "desc";
+}

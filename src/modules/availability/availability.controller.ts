@@ -33,8 +33,23 @@ const updateAvailability = catchAsync(async (req : Request , res : Response , ne
     })
 })
 
+const deleteAvailability = catchAsync(async (req : Request , res : Response , next : NextFunction)=> {
+    const userId = req.user?.id;
+    const availabilityId = req.params.id;
+
+    await availabilityService.deleteAvailabilityFromDB(userId as string , availabilityId as string)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Availability slot deleted successfully!",
+        data : null
+    })
+})
+
 
 export const availabilityController = {
     createAvailability,
-    updateAvailability
+    updateAvailability,
+    deleteAvailability
 }

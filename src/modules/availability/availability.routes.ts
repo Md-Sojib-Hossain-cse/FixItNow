@@ -9,4 +9,6 @@ router.post("/" , auth(Roles.TECHNICIAN), availabilityController.createAvailabil
 
 router.patch("/:id" , auth(Roles.TECHNICIAN), availabilityController.updateAvailability)
 
+router.delete("/:id" , auth(Roles.TECHNICIAN), availabilityController.deleteAvailability)
+
 export const availabilityRoutes = router;
