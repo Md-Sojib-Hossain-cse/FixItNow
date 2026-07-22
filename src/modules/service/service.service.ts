@@ -1,3 +1,4 @@
+import type { Roles } from "../../../generated/prisma/enums";
 import type { ServicesWhereInput } from "../../../generated/prisma/models";
 import AppError from "../../errors/appError";
 import { prisma } from "../../lib/prisma";
@@ -100,7 +101,6 @@ const updateServiceOnDB = async (userId : string , serviceId : string, payload :
 
 }
 
-
 const getAllServiceFromDB = async (query :TServiceQuery) => {
     const page = Number(query.page) || 1;
         const limit = Number(query.limit) || 5;
@@ -201,9 +201,45 @@ const getAllServiceFromDB = async (query :TServiceQuery) => {
 
 }
 
+const deleteServiceFromDB = async (serviceId : string , userId : string , role : Roles) => {
+
+        const service = await prisma.services.findUnique({
+            where : {
+                id : serviceId,
+                isDeleted : false
+            }
+        })
+
+        if(!service){
+            throw new AppError(httpStatus.NOT_FOUND , "Service not exists!")
+        }
+
+        const technician = await prisma.technicianProfiles.findUnique({
+            where : {
+                userId
+            }
+        })
+
+        if (role !== "ADMIN" && (!technician || technician.id !== service.technicianProfileId)) {
+            throw new AppError(httpStatus.UNAUTHORIZED,"Admin or technician can only delete their own service!");
+        }
+
+        const result = await prisma.services.update({
+            where : {
+                id : serviceId
+            },
+            data : {
+                isDeleted : true
+            }
+        })
+
+        return result
+}
+
 
 export const servicesService = {
     createServiceInDB,
     updateServiceOnDB,
-    getAllServiceFromDB
+    getAllServiceFromDB,
+    deleteServiceFromDB
 }

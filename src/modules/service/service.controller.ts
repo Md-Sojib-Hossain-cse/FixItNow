@@ -47,8 +47,25 @@ const getAllServices = catchAsync(async (req : Request, res : Response , next : 
 })
 
 
+const deleteService = catchAsync(async (req : Request, res : Response , next : NextFunction) => {
+    const userId = req.user?.id;
+    const role = req.user?.role!;
+    const serviceId = req.params.id;
+
+    await servicesService.deleteServiceFromDB(serviceId as string, userId as string , role)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Service deleted successfully!",
+        data : null
+    })
+})
+
+
 export const serviceController = {
     createService,
     updateService,
-    getAllServices
+    getAllServices,
+    deleteService
 }
