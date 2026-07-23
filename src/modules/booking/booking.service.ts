@@ -49,7 +49,11 @@ const createBookingOnDB = async (userId : string , payload : TCreateBooking) => 
         },
         include : {
             availability : true,
-            customer : true,
+            customer : {
+                omit : {
+                    password : true
+                }
+            },
             service : true,
         }
     })
@@ -320,10 +324,37 @@ const getMyBookingsFromDB = async (userId : string , query : TBookingQuery) => {
     
 }
 
+const getSingleBooking = async (userId : string , bookingId : string) => {
+    const booking = await prisma.bookings.findUnique({
+        where : {
+            id : bookingId,
+            customerId : userId
+        },
+        include : {
+            customer : {
+                omit : {
+                    password : true
+                }
+            },
+            availability : true,
+            payment : true,
+            review : true,
+            service : true
+        }
+    })
+
+    if(!booking){
+        throw new AppError(httpStatus.NOT_FOUND , "Booking not found!")
+    }
+
+    return booking;
+}
+
 export const bookingService = {
     createBookingOnDB,
     cancelBookingOnDB,
     declineBookingOnDB,
     acceptBookingOnDB,
-    getMyBookingsFromDB
+    getMyBookingsFromDB,
+    getSingleBooking
 }

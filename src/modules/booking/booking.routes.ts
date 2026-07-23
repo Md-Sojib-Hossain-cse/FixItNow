@@ -15,4 +15,6 @@ router.patch("/:id/accept" , auth(Roles.TECHNICIAN), bookingController.acceptBoo
 
 router.get("/my-bookings" , auth(Roles.CUSTOMER , Roles.TECHNICIAN, Roles.ADMIN), bookingController.getMyBookings)
 
+router.get("/:id" , auth(Roles.CUSTOMER , Roles.TECHNICIAN, Roles.ADMIN), bookingController.getSingleBooking)
+
 export const bookingRoutes = router;

@@ -77,11 +77,27 @@ const getMyBookings = catchAsync(async (req : Request , res : Response , next : 
 })
 
 
+const getSingleBooking = catchAsync(async (req : Request , res : Response , next : NextFunction) => {
+    const userId = req.user?.id;
+    const id = req.params.id;
+
+    const result = await bookingService.getSingleBooking(userId as string, id as string)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Booking retrieve successfully!",
+        data : result
+    })
+})
+
+
 
 export const bookingController = {
     createBooking,
     cancelBooking,
     declineBooking,
     acceptBooking,
-    getMyBookings
+    getMyBookings,
+    getSingleBooking
 }
