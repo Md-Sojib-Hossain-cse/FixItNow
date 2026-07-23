@@ -62,11 +62,26 @@ const acceptBooking = catchAsync(async (req : Request , res : Response , next : 
     })
 })
 
+const getMyBookings = catchAsync(async (req : Request , res : Response , next : NextFunction) => {
+    const userId = req.user?.id;
+    const query = req.query;
+
+    const result = await bookingService.getMyBookingsFromDB(userId as string, query)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Bookings retrieve successfully!",
+        data : result
+    })
+})
+
 
 
 export const bookingController = {
     createBooking,
     cancelBooking,
     declineBooking,
-    acceptBooking
+    acceptBooking,
+    getMyBookings
 }

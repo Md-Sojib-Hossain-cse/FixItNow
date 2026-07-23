@@ -13,4 +13,6 @@ router.patch("/:id/reject" , auth(Roles.TECHNICIAN), bookingController.declineBo
 
 router.patch("/:id/accept" , auth(Roles.TECHNICIAN), bookingController.acceptBooking)
 
+router.get("/my-bookings" , auth(Roles.CUSTOMER , Roles.TECHNICIAN, Roles.ADMIN), bookingController.getMyBookings)
+
 export const bookingRoutes = router;

@@ -1,7 +1,8 @@
 import { BookingStatus } from "../../../generated/prisma/enums";
+import type { BookingsWhereInput } from "../../../generated/prisma/models";
 import AppError from "../../errors/appError";
 import { prisma } from "../../lib/prisma";
-import type { TCreateBooking } from "./booking.interface";
+import type { TBookingQuery, TCreateBooking } from "./booking.interface";
 import httpStatus from "http-status"
 
 const createBookingOnDB = async (userId : string , payload : TCreateBooking) => {
@@ -218,10 +219,111 @@ const acceptBookingOnDB = async(userId : string , bookingId : string) => {
     return result;
 }
 
+const getMyBookingsFromDB = async (userId : string , query : TBookingQuery) => {
+    const page = Number(query.page) || 1;
+    const limit = Number(query.limit) || 5;
+    const skip = (page -1) * limit
+    const sortBy = query.sortBy || "createdAt";
+    const sortOrder = query.sortOrder || "desc";
+    const minPrice = query.minPrice || 0;
+        
+        
+    const andConditions : BookingsWhereInput[] = []
+    const orConditions : BookingsWhereInput[] =[]
+        
+    const bookingSearchableFields = [ "address", "note"]
+    
+    if(query.status){
+        andConditions.push({status : query.status})
+    }
+    
+    if(query.maxPrice){
+        andConditions.push({totalPrice : {
+            lte : Number(query.maxPrice),
+            gte : Number(minPrice)
+        }})
+    }else {
+        andConditions.push({totalPrice : {
+            gte : Number(minPrice)
+        }})
+    }
+    
+    if(query.startAfter){
+        andConditions.push({availability : {
+            startTime : {
+                gt : new Date(query.startAfter)
+            }
+        }})
+    }
+
+    if(query.endBefore){
+        andConditions.push({availability : {
+            endTime : {
+                lt : new Date(query.endBefore)
+            }
+        }})
+    }
+
+    
+        if(query.searchTerm){
+            bookingSearchableFields.forEach((field : string) => {
+            orConditions.push({
+                [field] : {
+                    contains : query.searchTerm,
+                    mode : "insensitive"
+                }
+            })
+        })
+    
+        andConditions.push({
+            OR : orConditions
+        })
+        }
+        
+        andConditions.push({
+            isDeleted: false,
+            customerId : userId
+        });
+    
+    
+        const [result, total] = await Promise.all([
+        prisma.bookings.findMany({
+            where: {
+                AND: andConditions,
+            },
+            include: {
+                availability : true,
+                payment : true,
+                service : true
+            },
+            orderBy: {
+                [sortBy]: sortOrder,
+            },
+            skip,
+            take: limit,
+        }),
+        prisma.bookings.count({
+            where: {
+                AND: andConditions,
+            },
+        }),
+    ])
+    
+        return {
+        meta: {
+            page,
+            limit,
+            total
+        },
+        data: result
+    };
+    
+}
 
 export const bookingService = {
     createBookingOnDB,
     cancelBookingOnDB,
     declineBookingOnDB,
-    acceptBookingOnDB
+    acceptBookingOnDB,
+    getMyBookingsFromDB
 }
