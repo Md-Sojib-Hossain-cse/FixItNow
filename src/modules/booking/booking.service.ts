@@ -140,9 +140,88 @@ const declineBookingOnDB = async(userId : string , bookingId : string) => {
     return result;
 }
 
+const acceptBookingOnDB = async(userId : string , bookingId : string) => {
+    const booking = await prisma.bookings.findUnique({
+        where : {
+            id : bookingId,
+            isDeleted : false,
+        },
+        select: {
+            service : {
+                select : {
+                    technicianProfile : {
+                        select : {
+                            userId : true,
+                            isAvailable : true
+                        }
+                    }
+                }
+            },
+            status : true,
+            availability : {
+                select : {
+                    isBooked : true,
+                    isDeleted : true,
+                    id : true
+                }
+            }
+        }
+    })
+
+    if(!booking){
+        throw new AppError(httpStatus.NOT_FOUND , "Booking not Exists!")
+    }
+
+    if(userId !== booking.service.technicianProfile.userId){
+        throw new AppError(httpStatus.UNAUTHORIZED , "You can only declined your own service bookings.")
+    }
+
+    if(booking.status !== BookingStatus.REQUESTED){
+        throw new AppError(httpStatus.FORBIDDEN, "Booking can be accepted only if its status is requested!")
+    }
+
+    if(booking.availability.isBooked || booking.availability.isDeleted){
+        throw new AppError(httpStatus.CONFLICT , "Availability slot is either booked or deleted!")
+    }
+
+    const result = await prisma.$transaction(async (tx) => {
+    const acceptedBooking = await tx.bookings.update({
+        where: {
+            id: bookingId,
+        },
+        data: {
+            status: BookingStatus.ACCEPTED,
+            availability: {
+                update: {
+                    isBooked: true,
+                },
+            },
+        },
+    });
+
+    await tx.bookings.updateMany({
+        where: {
+            availabilityId: booking.availability.id,
+            status: BookingStatus.REQUESTED,
+            NOT: {
+                id: bookingId,
+            },
+        },
+        data: {
+            status: BookingStatus.DECLINED,
+        },
+    });
+
+    return acceptedBooking;
+});
+
+    return result;
+}
+
 
 export const bookingService = {
     createBookingOnDB,
     cancelBookingOnDB,
-    declineBookingOnDB
+    declineBookingOnDB,
+    acceptBookingOnDB
 }

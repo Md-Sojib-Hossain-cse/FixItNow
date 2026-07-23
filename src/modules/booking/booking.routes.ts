@@ -11,4 +11,6 @@ router.patch("/:id/cancel" , auth(Roles.CUSTOMER), bookingController.cancelBooki
 
 router.patch("/:id/reject" , auth(Roles.TECHNICIAN), bookingController.declineBooking)
 
+router.patch("/:id/accept" , auth(Roles.TECHNICIAN), bookingController.acceptBooking)
+
 export const bookingRoutes = router;
