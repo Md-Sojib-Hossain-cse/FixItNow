@@ -15,6 +15,7 @@ const createBookingOnDB = async (userId : string , payload : TCreateBooking) => 
         where : {
             id : serviceId,
             isDeleted : false,
+            isActive : true
         }
     })
 
@@ -27,7 +28,7 @@ const createBookingOnDB = async (userId : string , payload : TCreateBooking) => 
             id : availabilityId,
             isBooked : false,
             isDeleted : false,
-            technicianProfileId : service.technicianProfileId
+            technicianProfileId : service.technicianProfileId,
         }
     })
 
@@ -55,7 +56,93 @@ const createBookingOnDB = async (userId : string , payload : TCreateBooking) => 
     return result;
 }
 
+const cancelBookingOnDB = async (userId : string , bookingId : string) => {
+    const booking = await prisma.bookings.findUnique({
+        where : {
+            id : bookingId,
+            isDeleted : false
+        },
+        select : {
+            customerId : true,
+            status : true
+        }
+    })
+
+    if(!booking){
+        throw new AppError(httpStatus.NOT_FOUND , "Booking you're trying to update not exists!")
+    }
+
+    if(userId !== booking.customerId){
+        throw new AppError(httpStatus.UNAUTHORIZED , "You can only cancel you're own booking.")
+    }
+
+    if(booking.status !== BookingStatus.REQUESTED){
+        throw new AppError(httpStatus.FORBIDDEN , "After accepted, declined or cancelled you can't change your booking status!")
+    }
+
+    const result = await prisma.bookings.update({
+        where : {
+            id : bookingId
+        },
+        data : {
+            status : BookingStatus.CANCELLED
+        },
+        include : {
+            service : true,
+            availability : true
+        }
+    })
+
+    return result;
+}
+
+const declineBookingOnDB = async(userId : string , bookingId : string) => {
+    const booking = await prisma.bookings.findUnique({
+        where : {
+            id : bookingId,
+            isDeleted : false,
+        },
+        select: {
+            service : {
+                select : {
+                    technicianProfile : {
+                        select : {
+                            userId : true
+                        }
+                    }
+                }
+            },
+            status : true,
+        }
+    })
+
+    if(!booking){
+        throw new AppError(httpStatus.NOT_FOUND , "Booking not Exists!")
+    }
+
+    if(userId !== booking.service.technicianProfile.userId){
+        throw new AppError(httpStatus.UNAUTHORIZED , "You can only declined your own service bookings.")
+    }
+
+    if(booking.status !== BookingStatus.REQUESTED){
+        throw new AppError(httpStatus.FORBIDDEN, "After being accepted , declined or cancelled you can't declined any booking!")
+    }
+
+    const result = await prisma.bookings.update({
+        where : {
+            id : bookingId
+        },
+        data : {
+            status : BookingStatus.DECLINED
+        }
+    })
+
+    return result;
+}
+
 
 export const bookingService = {
-    createBookingOnDB
+    createBookingOnDB,
+    cancelBookingOnDB,
+    declineBookingOnDB
 }

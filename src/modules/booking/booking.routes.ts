@@ -7,4 +7,8 @@ const router = Router()
 
 router.post("/" , auth(Roles.CUSTOMER), bookingController.createBooking)
 
+router.patch("/:id/cancel" , auth(Roles.CUSTOMER), bookingController.cancelBooking)
+
+router.patch("/:id/reject" , auth(Roles.TECHNICIAN), bookingController.declineBooking)
+
 export const bookingRoutes = router;
