@@ -17,6 +17,8 @@ router.patch("/:id/in-progress" , auth(Roles.TECHNICIAN), bookingController.inPr
 
 router.patch("/:id/complete" , auth(Roles.TECHNICIAN), bookingController.completeBooking)
 
+router.get("/assigned" , auth(Roles.TECHNICIAN), bookingController.getAssignedBookings)
+
 router.get("/my-bookings" , auth(Roles.CUSTOMER , Roles.TECHNICIAN, Roles.ADMIN), bookingController.getMyBookings)
 
 router.get("/:id" , auth(Roles.CUSTOMER , Roles.TECHNICIAN, Roles.ADMIN), bookingController.getSingleBooking)

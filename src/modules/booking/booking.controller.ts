@@ -32,7 +32,6 @@ const cancelBooking = catchAsync(async (req : Request , res : Response , next : 
     })
 })
 
-
 const declineBooking = catchAsync(async (req : Request , res : Response , next : NextFunction) => {
     const userId = req.user?.id;
     const bookingId = req.params.id;
@@ -119,6 +118,21 @@ const getSingleBooking = catchAsync(async (req : Request , res : Response , next
     })
 })
 
+const getAssignedBookings = catchAsync(async (req : Request , res : Response , next : NextFunction) => {
+    const userId = req.user?.id;
+    const query = req.query;
+
+
+    const result = await bookingService.getAssignedBookingsFromDB(userId as string, query)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Bookings retrieve successfully!",
+        data : result
+    })
+})
+
 
 
 export const bookingController = {
@@ -129,5 +143,6 @@ export const bookingController = {
     getMyBookings,
     getSingleBooking,
     inProgressBooking,
-    completeBooking
+    completeBooking,
+    getAssignedBookings
 }
