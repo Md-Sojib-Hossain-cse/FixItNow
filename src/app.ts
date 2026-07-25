@@ -18,7 +18,7 @@ import { paymentRoutes } from "./modules/payment/payment.routes"
 const app : Application = express()
 
 app.use(cors({
-    origin : config.app_url
+    origin : [config.app_url! , config.backend_url!]
 }))
 
 app.use(express.json())
