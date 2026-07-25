@@ -11,4 +11,8 @@ router.get("/" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN) , reviewC
 
 router.get("/:id" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN) , reviewController.getSingleReview)
 
+router.patch("/:id" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN) , reviewController.updateReview)
+
+router.delete("/:id" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN) , reviewController.deleteReview)
+
 export const reviewRoutes = router;

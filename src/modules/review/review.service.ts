@@ -1,8 +1,8 @@
-import { BookingStatus } from "../../../generated/prisma/enums"
+import { BookingStatus, Roles } from "../../../generated/prisma/enums"
 import type { ReviewsWhereInput } from "../../../generated/prisma/models"
 import AppError from "../../errors/appError"
 import { prisma } from "../../lib/prisma"
-import type { TCreateReview, TReviewQuery } from "./review.interface"
+import type { TCreateReview, TReviewQuery, TUpdateReview } from "./review.interface"
 import httpStatus from "http-status"
 
 const createReviewOnDB = async (userId : string, payload : TCreateReview) => {
@@ -118,9 +118,80 @@ const getSingleReviewsFromDB = async (reviewId : string) => {
     return result;
 }
 
+const updateReviewOnDB = async (userId : string , reviewId : string , payload : TUpdateReview) => {
+    if(!payload.comment && !payload.rating){
+        throw new AppError(httpStatus.BAD_REQUEST , "Provide payload to update review!")
+    }
+
+    const review = await prisma.reviews.findUnique({
+        where : {
+            id : reviewId
+        },
+        include : {
+            booking :{
+                select : {
+                    customerId : true
+                }
+            }
+        }
+    })
+
+    if(!review){
+        throw new AppError(httpStatus.NOT_FOUND , "Review not found!")
+    }
+
+    if(review.booking.customerId !== userId){
+        throw new AppError(httpStatus.UNAUTHORIZED , "You can only update your own review!")
+    }
+
+    const result = await prisma.reviews.update({
+        where : {
+            id : reviewId
+        },
+        data : payload,
+        include : {
+            booking : true
+        }
+    })
+
+    return result;
+}
+
+const deleteReviewFromDB = async(reviewId : string , user : {id : string , role : Roles}) => {
+    const review = await prisma.reviews.findUnique({
+        where : {
+            id : reviewId
+        },
+        include : {
+            booking :{
+                select : {
+                    customerId : true
+                }
+            }
+        }
+    })
+
+    if(!review){
+        throw new AppError(httpStatus.NOT_FOUND , "Review not found!")
+    }
+
+    if(review.booking.customerId !== user.id || user.role === Roles.ADMIN){
+        throw new AppError(httpStatus.UNAUTHORIZED , "You can only delete your own review or admins can delete review!")
+    }
+
+    const result = await prisma.reviews.delete({
+        where : {
+            id : reviewId
+        }
+    })
+
+    return result;
+}
 
 export const reviewService = {
     createReviewOnDB,
     getMyReviewsFromDB,
-    getSingleReviewsFromDB
+    getSingleReviewsFromDB,
+    updateReviewOnDB,
+    deleteReviewFromDB
 }

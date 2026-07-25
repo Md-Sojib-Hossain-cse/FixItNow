@@ -12,3 +12,8 @@ export type TReviewQuery = {
     sortBy ?: "rating" | "createdAt";
     sortOrder ?: "asc" | "desc";
 }
+
+export type TUpdateReview = {
+    rating ?: number;
+    comment ?: string;
+}

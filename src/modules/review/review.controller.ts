@@ -46,8 +46,43 @@ const getSingleReview = catchAsync(async(req : Request , res : Response , next :
     })
 })
 
+
+const updateReview = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
+    const userId = req.user?.id;
+    const reviewId = req.params.id;
+    const payload = req.body;
+
+    const result = await reviewService.updateReviewOnDB(userId as string , reviewId as string , payload)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Review updated successfully!",
+        data : result
+    })
+})
+
+const deleteReview = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
+    const user = {
+        id : req.user?.id!,
+        role : req.user?.role!
+    };
+    const reviewId = req.params.id;
+
+    await reviewService.deleteReviewFromDB(reviewId as string , user)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Review deleted successfully!",
+        data : null
+    })
+})
+
 export const reviewController = {
     createReview,
     getMyReview,
-    getSingleReview
+    getSingleReview,
+    updateReview,
+    deleteReview
 }
