@@ -5,6 +5,8 @@ import { prisma } from "../../lib/prisma"
 import httpStatus from "http-status"
 import { v4 as uuidv4 } from 'uuid';
 import SSLCommerzPayment from "sslcommerz-lts";
+import type { TCreatePaymentPayload, TPaymentQuery, TUpdatePaymentPayload } from "./payment.interface"
+import type { PaymentsWhereInput } from '../../../generated/prisma/models';
 
 const initiatePayment = async (userId : string , bookingId : string) => {
     let transactionId : string;
@@ -99,7 +101,9 @@ const initiatePayment = async (userId : string , bookingId : string) => {
 
     const gatewayPageURL = apiResponse.GatewayPageURL;
 
-    const createPaymentPayload = {
+
+
+    const createPaymentPayload : TCreatePaymentPayload = {
         bookingId,
         transactionId : transactionId,
         amount : Number(booking.totalPrice),
@@ -111,7 +115,7 @@ const initiatePayment = async (userId : string , bookingId : string) => {
         }
     }
 
-    const updatePaymentPayload = {
+    const updatePaymentPayload : TUpdatePaymentPayload = {
         transactionId,
         status : PaymentStatus.PENDING,
         provider : PaymentProvider.SSLCOMMERZ,
@@ -264,9 +268,140 @@ const cancelPayment = async(transactionId : string) => {
     return result
 }
 
+const getMyPaymentsFromDB = async(userId : string , query : TPaymentQuery) => {
+    const page = Number(query.page) || 1;
+    const limit = Number(query.limit) || 5;
+    const skip = (page -1) * limit
+    const sortBy = query.sortBy || "createdAt";
+    const sortOrder = query.sortOrder || "desc";
+    const minAmount = query.minAmount || 0;
+    const paidBefore = query.paidBefore ?? new Date()
+
+    if(query.maxAmount && (query.maxAmount < minAmount)){
+        throw new AppError(httpStatus.BAD_REQUEST , "Max amount should me more then min amount!")
+    }
+
+    if(query.paidAfter && (query.paidAfter > paidBefore)){
+        throw new AppError(httpStatus.BAD_REQUEST , "Paid after can't be after paid before!")
+    }
+        
+    const andConditions : PaymentsWhereInput[] = []
+    const orConditions : PaymentsWhereInput[] =[]
+        
+    const paymentSearchableFields = [ "transactionId"]
+    
+        if(query.maxAmount){
+            andConditions.push({
+                amount : {
+                    lte : Number(query.maxAmount),
+                    gte : Number(minAmount)
+                }
+            })
+        } else {
+            andConditions.push({
+                amount : {
+                    gte : Number(minAmount)
+                }
+            })
+        }
+
+        if(query.paidAfter){
+            andConditions.push({
+                paidAt : {
+                    lte : paidBefore,
+                    gte : query.paidAfter
+                }
+            })
+        } else {
+            andConditions.push({
+                paidAt : {
+                    lte : paidBefore
+                }
+            })
+        }
+    
+        if(query.provider){
+            andConditions.push({provider : query.provider})
+        }
+
+        if(query.status){
+            andConditions.push({status : query.status})
+        }
+
+
+    
+        if(query.searchTerm){
+            paymentSearchableFields.forEach((field : string) => {
+            orConditions.push({
+                [field] : {
+                    contains : query.searchTerm,
+                    mode : "insensitive"
+                }
+            })
+        })
+    
+        andConditions.push({
+            OR : orConditions
+        })
+        }
+
+        andConditions.push({
+            booking : {
+                customerId : userId
+            }
+        })
+    
+        const [result, total] = await Promise.all([
+        prisma.payments.findMany({
+            where: {
+                AND: andConditions,
+            },
+            include: {
+                booking : true
+            },
+            orderBy: {
+                [sortBy]: sortOrder,
+            },
+            skip,
+            take: limit,
+        }),
+        prisma.payments.count({
+            where: {
+                AND: andConditions,
+            },
+        }),
+    ])
+    
+        return {
+        meta: {
+            page,
+            limit,
+            total
+        },
+        data: result
+}
+}
+
+const getSinglePaymentFromDB = async(userId : string , paymentId : string) => {
+    const result = await prisma.payments.findUnique({
+        where : {
+            id : paymentId,
+            booking : {
+                customerId : userId
+            }
+        }
+    })
+
+    return result;
+}
+
+
+
 export const paymentService = {
     initiatePayment,
     successPayment,
     failPayment,
-    cancelPayment
+    cancelPayment,
+    getMyPaymentsFromDB,
+    getSinglePaymentFromDB,
 }

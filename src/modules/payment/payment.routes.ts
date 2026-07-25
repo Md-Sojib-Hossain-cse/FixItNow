@@ -13,4 +13,8 @@ router.post("/:id/failed" , paymentController.failPayment)
 
 router.post("/:id/cancel" , paymentController.cancelPayment)
 
+router.get("/my-payments", auth(Roles.CUSTOMER , Roles.TECHNICIAN, Roles.ADMIN) , paymentController.getMyPayments)
+
+router.get("/:id", auth(Roles.CUSTOMER , Roles.TECHNICIAN, Roles.ADMIN) , paymentController.getSinglePayment)
+
 export const paymentRoutes = router;

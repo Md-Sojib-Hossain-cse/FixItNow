@@ -38,9 +38,38 @@ const cancelPayment = catchAsync(async(req : Request , res : Response , next : N
     res.status(httpStatus.OK).redirect(result.url)
 })
 
+const getMyPayments = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
+    const userId = req.user?.id;
+    const query = req.query;
+    const result = await paymentService.getMyPaymentsFromDB(userId as string, query)
+
+    sendResponse(res , {
+        success : true, 
+        statusCode : httpStatus.OK,
+        message : "Payemnts retrieve successfully!",
+        data : result
+    })
+})
+
+
+const getSinglePayment = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
+    const userId = req.user?.id;
+    const paymentId = req.params.id;
+    const result = await paymentService.getSinglePaymentFromDB(userId as string, paymentId as string)
+
+    sendResponse(res , {
+        success : true, 
+        statusCode : httpStatus.OK,
+        message : "Payemnt retrieve successfully!",
+        data : result
+    })
+})
+
 export const paymentController = {
     initiatePayment,
     successPayment,
     failPayment,
-    cancelPayment
+    cancelPayment,
+    getMyPayments,
+    getSinglePayment
 }
