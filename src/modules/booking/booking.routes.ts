@@ -13,6 +13,8 @@ router.patch("/:id/reject" , auth(Roles.TECHNICIAN), bookingController.declineBo
 
 router.patch("/:id/accept" , auth(Roles.TECHNICIAN), bookingController.acceptBooking)
 
+router.patch("/:id/in-progress" , auth(Roles.TECHNICIAN), bookingController.inProgressBooking)
+
 router.get("/my-bookings" , auth(Roles.CUSTOMER , Roles.TECHNICIAN, Roles.ADMIN), bookingController.getMyBookings)
 
 router.get("/:id" , auth(Roles.CUSTOMER , Roles.TECHNICIAN, Roles.ADMIN), bookingController.getSingleBooking)

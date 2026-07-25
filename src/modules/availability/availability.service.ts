@@ -171,6 +171,10 @@ const deleteAvailabilityFromDB = async (userId : string , availabilityId : strin
         throw new AppError(httpStatus.UNAUTHORIZED , "You can only delete your own availability!")
     }
 
+    if(availability.isBooked){
+        throw new AppError(httpStatus.FORBIDDEN , "You can't delete this slot because it's already booked!")
+    }
+
     const result = await prisma.availability.update({
         where : {
             id : availabilityId
