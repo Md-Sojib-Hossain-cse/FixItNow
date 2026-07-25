@@ -6,6 +6,11 @@ import type { TCreateService, TServiceQuery, TUpdateService } from "./service.in
 import httpStatus from "http-status"
 
 const createServiceInDB = async (userId : string  ,  payload : TCreateService) => {
+
+    if(!payload.categoryId || !payload.durationInHour || !payload.technicianProfileId){
+        throw new AppError(httpStatus.BAD_REQUEST , "Please provide all required field.")
+    }
+
     const technicianProfile = await prisma.technicianProfiles.findUnique({
         where : {
             userId

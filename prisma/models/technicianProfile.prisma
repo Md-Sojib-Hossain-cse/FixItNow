@@ -15,7 +15,6 @@ model TechnicianProfiles{
 
     services Services[]
     availability Availability[]
-    reviews Reviews[]
 
     @@map("technicianProfiles")
 }

@@ -12,6 +12,10 @@ import type { UsersWhereInput } from "../../../generated/prisma/models";
 
 const registerUserIntoDB = async (payload : TRegisterUser) => {
 
+    if(!payload.email || !payload.name || !payload.password){
+        throw new AppError(httpStatus.BAD_REQUEST , "Please provide all required field!")
+    }
+
     const orConditions : UsersWhereInput[] = [{email : payload.email}];
 
     if(payload.phone){

@@ -12,6 +12,8 @@ import { serviceRoutes } from "./modules/service/service.routes"
 import { categoryRoutes } from "./modules/category/category.routes"
 import { availabilityRoutes } from "./modules/availability/availability.routes"
 import { bookingRoutes } from "./modules/booking/booking.routes"
+import { reviewRoutes } from "./modules/review/review.routes"
+import { paymentRoutes } from "./modules/payment/payment.routes"
 
 const app : Application = express()
 
@@ -38,6 +40,8 @@ app.use("/api/service" , serviceRoutes)
 app.use("/api/categories" , categoryRoutes)
 app.use("/api/availability" , availabilityRoutes)
 app.use("/api/bookings" , bookingRoutes)
+app.use("/api/reviews" , reviewRoutes)
+app.use("/api/payments" , paymentRoutes)
 
 app.use(notFound)
 

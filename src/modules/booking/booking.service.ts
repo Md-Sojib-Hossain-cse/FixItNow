@@ -8,6 +8,10 @@ import httpStatus from "http-status"
 const createBookingOnDB = async (userId : string , payload : TCreateBooking) => {
     const {customerId , availabilityId , serviceId , address , note} = payload;
 
+    if(!customerId || !availabilityId || !serviceId || !address){
+        throw new AppError(httpStatus.BAD_REQUEST , "Please provide all required field!")
+    }
+
     if(userId !== customerId){
         throw new AppError(httpStatus.UNAUTHORIZED , "You can only book services for your own!")
     }
@@ -338,7 +342,7 @@ const getSingleBooking = async (userId : string , bookingId : string) => {
             },
             availability : true,
             payment : true,
-            review : true,
+            reviews : true,
             service : true
         }
     })

@@ -1,8 +1,15 @@
 import type { CategoriesWhereInput } from "../../../../generated/prisma/models";
+import AppError from "../../../errors/appError";
 import { prisma } from "../../../lib/prisma";
 import type { TCategoryQuery, TCreateCategory, TUpdateCategory } from "./adminCategories.interface";
+import httpStatus from "http-status"
 
 const createCategoryIntoDB = async (payload : TCreateCategory) => {
+
+    if(!payload.name){
+        throw new AppError(httpStatus.BAD_REQUEST , "Please provide all required field!")
+    }
+
     if(!payload.slug){
         payload.slug = payload.name.split(" ").join("_")
     }

@@ -5,8 +5,8 @@ model Payments {
     bookingId String @unique
 
     transactionId String @unique
-    amount Decimal @db.Decimal(1,1)
-    method String
+    amount Decimal @db.Decimal(8,1)
+    meta Json
     provider PaymentProvider
     status PaymentStatus @default(PENDING)
     paidAt DateTime?

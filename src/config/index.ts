@@ -11,5 +11,7 @@ export default {
     jwt_refresh_secret : process.env.JWT_REFRESH_SECRET!,
     jwt_access_expired_in : process.env.JWT_ACCESS_EXPIRED_IN!,
     jwt_refresh_expired_in : process.env.JWT_REFRESH_EXPIRED_IN!,
-    bcrypt_salt_round : process.env.BCRYPT_SALT_ROUND!
+    bcrypt_salt_round : process.env.BCRYPT_SALT_ROUND!,
+    ssl_commerz_store_id : process.env.SSL_COMMERZ_STORE_ID!,
+    ssl_commerz_store_password : process.env.SSL_COMMERZ_STORE_PASSWORD!
 }

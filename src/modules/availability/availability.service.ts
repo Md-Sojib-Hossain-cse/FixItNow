@@ -9,6 +9,10 @@ const createAvailabilityOnDB = async (userId : string, payload : TCreateAvailabi
     const startTime = payload.startTime;
     const endTime = payload.endTime;
 
+    if(!payload.day || !payload.startTime || !payload.endTime || !payload.technicianProfileId){
+        throw new AppError(httpStatus.BAD_REQUEST , "Please provide all required field!")
+    }
+
     const isSameDay = (a: Date, b: Date) =>
     a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth() &&

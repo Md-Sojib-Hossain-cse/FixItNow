@@ -17,7 +17,7 @@ model Bookings{
     updatedAt DateTime @updatedAt
 
     payment Payments?
-    review Reviews?
+    reviews Reviews[]
 
     @@map("bookings")
 }

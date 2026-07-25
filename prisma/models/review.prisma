@@ -1,12 +1,8 @@
 model Reviews {
     id String @id @default(uuid())
 
-    customer Users @relation(fields : [customerId] , references : [id])
-    customerId String
-    technicianProfile TechnicianProfiles @relation(fields : [technicianProfileId] , references : [id])
-    technicianProfileId String
     booking Bookings @relation(fields : [bookingId] , references : [id])
-    bookingId String @unique
+    bookingId String 
     rating Decimal @db.Decimal(8,2)
     comment String
     createdAt DateTime @default(now())
