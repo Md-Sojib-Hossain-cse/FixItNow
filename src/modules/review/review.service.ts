@@ -101,8 +101,26 @@ const getMyReviewsFromDB = async (userId : string , query : TReviewQuery) => {
     
 }
 
+const getSingleReviewsFromDB = async (reviewId : string) => {
+    const result = await prisma.reviews.findUnique({
+        where : {
+            id : reviewId
+        },
+        include : {
+            booking : true
+        }
+    })
+
+    if(!result){
+        throw new AppError(httpStatus.NOT_FOUND , "Review not found!")
+    }
+    
+    return result;
+}
+
 
 export const reviewService = {
     createReviewOnDB,
-    getMyReviewsFromDB
+    getMyReviewsFromDB,
+    getSingleReviewsFromDB
 }

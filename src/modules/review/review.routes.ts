@@ -9,4 +9,6 @@ router.post("/" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN) , review
 
 router.get("/" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN) , reviewController.getMyReview)
 
-export const reviewRoutes = router
+router.get("/:id" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN) , reviewController.getSingleReview)
+
+export const reviewRoutes = router;

@@ -33,7 +33,21 @@ const getMyReview = catchAsync(async(req : Request , res : Response , next : Nex
     })
 })
 
+const getSingleReview = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
+    const reviewId = req.params.id;
+
+    const result = await reviewService.getSingleReviewsFromDB(reviewId as string)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Review retrieve successfully!",
+        data : result
+    })
+})
+
 export const reviewController = {
     createReview,
-    getMyReview
+    getMyReview,
+    getSingleReview
 }
