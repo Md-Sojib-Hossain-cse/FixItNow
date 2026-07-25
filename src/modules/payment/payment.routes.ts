@@ -9,4 +9,8 @@ router.post("/:id/initiate" ,auth(Roles.CUSTOMER , Roles.TECHNICIAN, Roles.ADMIN
 
 router.post("/:id/success" , paymentController.successPayment)
 
+router.post("/:id/failed" , paymentController.failPayment)
+
+router.post("/:id/cancel" , paymentController.cancelPayment)
+
 export const paymentRoutes = router;

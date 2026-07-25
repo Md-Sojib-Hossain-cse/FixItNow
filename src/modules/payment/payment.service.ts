@@ -62,10 +62,10 @@ const initiatePayment = async (userId : string , bookingId : string) => {
         total_amount: Number(booking?.totalPrice),
         currency: 'BDT',
         tran_id: transactionId, // use unique tran_id for each api call
-        success_url: `http://localhost:5000/api/payments/${transactionId}/success`,
-        fail_url: `http://localhost:5000/api/payments/${transactionId}/failed`,
-        cancel_url: `http://localhost:5000/api/payments/${transactionId}/cancel`,
-        ipn_url: 'http://localhost:3030/ipn',
+        success_url: `${config.backend_url}/api/payments/${transactionId}/success`,
+        fail_url: `${config.backend_url}/api/payments/${transactionId}/failed`,
+        cancel_url: `${config.backend_url}/api/payments/${transactionId}/cancel`,
+        ipn_url: `${config.backend_url}/ipn`,
         shipping_method: 'Courier',
         product_name: booking.service.title,
         product_category: booking.service.category.name,
@@ -114,6 +114,7 @@ const initiatePayment = async (userId : string , bookingId : string) => {
     const updatePaymentPayload = {
         transactionId,
         status : PaymentStatus.PENDING,
+        provider : PaymentProvider.SSLCOMMERZ,
         meta : {
             data ,
             gatewayPageURL
@@ -133,12 +134,139 @@ const initiatePayment = async (userId : string , bookingId : string) => {
     };
 }
 
-const successPayment = async(userId : string , transactionId : string) => {
-    console.log(transactionId)
-    return transactionId
+const successPayment = async(transactionId : string) => {
+
+    const result = await prisma.$transaction(async (px) => {
+        const payment = await px.payments.findUnique({
+            where : {
+                transactionId : transactionId,
+            }
+        })
+
+        if(!payment){
+            throw new AppError(httpStatus.BAD_REQUEST , "for payment you're try to initiate not found!")
+        }
+
+        const successfulPayment = await px.payments.update({
+            where : {
+                transactionId 
+            },
+            data : {
+                status : PaymentStatus.SUCCESS,
+                paidAt : new Date()
+            }
+        })
+
+        if(!successfulPayment){
+            throw new AppError(httpStatus.BAD_GATEWAY , "Something went wrong during payment!")
+        }
+
+        await px.bookings.update({
+            where : {
+                id : successfulPayment.bookingId
+            },
+            data : {
+                status : BookingStatus.PAID
+            }
+        })
+
+        return {
+            url : `${config.payment_success_url}/${transactionId}`
+        }
+    })
+    
+    return result
+}
+
+const failPayment = async(transactionId : string) => {
+
+    const result = await prisma.$transaction(async (px) => {
+        const payment = await px.payments.findUnique({
+            where : {
+                transactionId : transactionId,
+            }
+        })
+
+        if(!payment){
+            throw new AppError(httpStatus.BAD_REQUEST , "for payment you're try to initiate not found!")
+        }
+
+        const failedPayment = await px.payments.update({
+            where : {
+                transactionId 
+            },
+            data : {
+                status : PaymentStatus.FAILED,
+            }
+        })
+
+        if(!failedPayment){
+            throw new AppError(httpStatus.BAD_GATEWAY , "Something went wrong during payment!")
+        }
+
+        await px.bookings.update({
+            where : {
+                id : failedPayment.bookingId
+            },
+            data : {
+                status : BookingStatus.ACCEPTED
+            }
+        })
+
+        return {
+            url : `${config.payment_fail_url}/${transactionId}`
+        }
+    })
+    
+    return result
+}
+
+const cancelPayment = async(transactionId : string) => {
+
+    const result = await prisma.$transaction(async (px) => {
+        const payment = await px.payments.findUnique({
+            where : {
+                transactionId : transactionId,
+            }
+        })
+
+        if(!payment){
+            throw new AppError(httpStatus.BAD_REQUEST , "for payment you're try to initiate not found!")
+        }
+
+        const cancelPayment = await px.payments.update({
+            where : {
+                transactionId 
+            },
+            data : {
+                status : PaymentStatus.CANCELLED,
+            }
+        })
+
+        if(!cancelPayment){
+            throw new AppError(httpStatus.BAD_GATEWAY , "Something went wrong during payment!")
+        }
+
+        await px.bookings.update({
+            where : {
+                id : cancelPayment.bookingId
+            },
+            data : {
+                status : BookingStatus.ACCEPTED
+            }
+        })
+
+        return {
+            url : `${config.payment_cancel_url}/${transactionId}`
+        }
+    })
+    
+    return result
 }
 
 export const paymentService = {
     initiatePayment,
-    successPayment
+    successPayment,
+    failPayment,
+    cancelPayment
 }

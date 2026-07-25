@@ -18,19 +18,29 @@ const initiatePayment = catchAsync(async(req : Request , res : Response , next :
 })
 
 const successPayment = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
-    const userId = req.user?.id;
     const transactionId = req.params.id;
-    const result = await paymentService.successPayment(userId as string, transactionId as string)
+    const result = await paymentService.successPayment(transactionId as string)
 
-    sendResponse(res , {
-        success : true, 
-        statusCode : httpStatus.OK,
-        message : "Payemnt received successfully!",
-        data : result
-    })
+    res.status(httpStatus.OK).redirect(result.url)
+})
+
+const failPayment = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
+    const transactionId = req.params.id;
+    const result = await paymentService.failPayment(transactionId as string)
+
+    res.status(httpStatus.OK).redirect(result.url)
+})
+
+const cancelPayment = catchAsync(async(req : Request , res : Response , next : NextFunction) => {
+    const transactionId = req.params.id;
+    const result = await paymentService.cancelPayment(transactionId as string)
+
+    res.status(httpStatus.OK).redirect(result.url)
 })
 
 export const paymentController = {
     initiatePayment,
-    successPayment
+    successPayment,
+    failPayment,
+    cancelPayment
 }
