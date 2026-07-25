@@ -206,6 +206,25 @@ const getAllServiceFromDB = async (query :TServiceQuery) => {
 
 }
 
+const getSingleServiceFromDB = async(serviceId : string) => {
+    const result = await prisma.services.findUnique({
+        where : {
+            id : serviceId
+        },
+        include : {
+            bookings : true,
+            technicianProfile : true,
+            category : true
+        }
+    })
+
+    if(!result){
+        throw new AppError(httpStatus.NOT_FOUND , "Service not found!")
+    }
+
+    return result
+}
+
 const deleteServiceFromDB = async (serviceId : string , userId : string , role : Roles) => {
 
         const service = await prisma.services.findUnique({
@@ -241,10 +260,39 @@ const deleteServiceFromDB = async (serviceId : string , userId : string , role :
         return result
 }
 
+const getServiceReviewsFromDB = async (serviceId : string) => {
+    const [service, reviews] = await Promise.all([
+        prisma.services.findUnique({
+            where: {
+                id: serviceId,
+            },
+        }),
+
+        prisma.reviews.findMany({
+            where: {
+                booking: {
+                serviceId,
+            },
+            }
+        }),
+    ]);
+
+    if (!service) {
+        throw new AppError(httpStatus.NOT_FOUND, "Service not found!");
+    }
+
+    return {
+        ...service,
+        reviews,
+    };
+}
+
 
 export const servicesService = {
     createServiceInDB,
     updateServiceOnDB,
     getAllServiceFromDB,
-    deleteServiceFromDB
+    deleteServiceFromDB,
+    getServiceReviewsFromDB,
+    getSingleServiceFromDB
 }

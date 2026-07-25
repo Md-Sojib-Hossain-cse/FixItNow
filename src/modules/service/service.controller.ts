@@ -46,6 +46,19 @@ const getAllServices = catchAsync(async (req : Request, res : Response , next : 
     })
 })
 
+const getSingleService = catchAsync(async (req : Request, res : Response , next : NextFunction) => {
+    const serviceId = req.params.id;
+
+    const result = await servicesService.getSingleServiceFromDB(serviceId as string)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Service retrieve successfully!",
+        data : result
+    })
+})
+
 
 const deleteService = catchAsync(async (req : Request, res : Response , next : NextFunction) => {
     const userId = req.user?.id;
@@ -62,10 +75,25 @@ const deleteService = catchAsync(async (req : Request, res : Response , next : N
     })
 })
 
+const getServiceReviews = catchAsync(async (req : Request, res : Response , next : NextFunction) => {
+    const serviceId = req.params.id;
+
+    const result = await servicesService.getServiceReviewsFromDB(serviceId as string)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Service reviews retrieve successfully!",
+        data : result
+    })
+})
+
 
 export const serviceController = {
     createService,
     updateService,
     getAllServices,
-    deleteService
+    deleteService,
+    getServiceReviews,
+    getSingleService
 }
