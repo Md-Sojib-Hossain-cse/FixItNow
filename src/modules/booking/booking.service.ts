@@ -279,6 +279,58 @@ const inProgressBookingOnDB = async(userId : string , bookingId : string) => {
     return result;
 }
 
+const completeBookingOnDB = async(userId : string , bookingId : string) => {
+    const booking = await prisma.bookings.findUnique({
+        where : {
+            id : bookingId
+        },
+        select: {
+            service : {
+                select : {
+                    technicianProfile : {
+                        select : {
+                            userId : true,
+                            isAvailable : true
+                        }
+                    }
+                }
+            },
+            status : true,
+            availability : {
+                select : {
+                    isBooked : true,
+                    isDeleted : true,
+                    id : true
+                }
+            },
+            isDeleted : true
+        }
+    })
+
+    if(!booking || booking.isDeleted){
+        throw new AppError(httpStatus.NOT_FOUND , "Booking not Exists!")
+    }
+
+    if(userId !== booking.service.technicianProfile.userId){
+        throw new AppError(httpStatus.UNAUTHORIZED , "You can only in progress your own service bookings.")
+    }
+
+    if(booking.status !== BookingStatus.IN_PROGRESS){
+        throw new AppError(httpStatus.FORBIDDEN, "Booking can completed only if its status is in progress!")
+    }
+
+    const result = await prisma.bookings.update({
+        where: {
+            id: bookingId,
+        },
+        data: {
+            status: BookingStatus.COMPLETED
+        },
+    });
+
+    return result;
+}
+
 const getMyBookingsFromDB = async (userId : string , query : TBookingQuery) => {
     const page = Number(query.page) || 1;
     const limit = Number(query.limit) || 5;
@@ -413,5 +465,6 @@ export const bookingService = {
     acceptBookingOnDB,
     getMyBookingsFromDB,
     getSingleBooking,
-    inProgressBookingOnDB
+    inProgressBookingOnDB,
+    completeBookingOnDB
 }

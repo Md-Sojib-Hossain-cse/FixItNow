@@ -76,6 +76,20 @@ const inProgressBooking = catchAsync(async (req : Request , res : Response , nex
     })
 })
 
+const completeBooking = catchAsync(async (req : Request , res : Response , next : NextFunction) => {
+    const userId = req.user?.id;
+    const bookingId = req.params.id;
+
+    const result = await bookingService.completeBookingOnDB(userId as string, bookingId as string)
+
+    sendResponse(res , {
+        success : true,
+        statusCode : httpStatus.OK,
+        message : "Booking completed successfully!",
+        data : result
+    })
+})
+
 const getMyBookings = catchAsync(async (req : Request , res : Response , next : NextFunction) => {
     const userId = req.user?.id;
     const query = req.query;
@@ -114,5 +128,6 @@ export const bookingController = {
     acceptBooking,
     getMyBookings,
     getSingleBooking,
-    inProgressBooking
+    inProgressBooking,
+    completeBooking
 }
