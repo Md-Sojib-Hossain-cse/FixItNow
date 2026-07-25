@@ -14,55 +14,41 @@ https://fix-it-now-ochre-two.vercel.app
 
 ---
 
-# ✨ Features
+# 🚀 Highlights
 
-- 🔐 JWT Authentication & Authorization
-- 👥 Role-Based Access Control
-- 👨‍🔧 Technician Profile Management
-- 🛠️ Service Management
-- 📅 Availability Scheduling
-- 📖 Category Management
-- 📦 Booking Management
-- 💳 Payment Integration Ready
-- ⭐ Review & Rating System
-- 🔍 Search, Filter, Pagination & Sorting
-- 🗑️ Soft Delete Support
-- 🔒 Password Hashing with Bcrypt
-- ⚡ Centralized Error Handling
-- ✅ Request Validation using Zod
-- 📄 RESTful API Design
+| Feature | Description |
+|----------|-------------|
+| 🔐 **JWT Authentication** | Secure authentication using Access & Refresh Tokens with Role-Based Access Control (RBAC). |
+| 👥 **Multi-Role Architecture** | Dedicated workflows for Admin, Customer, and Technician with granular permissions. |
+| 🛠 **Service Marketplace** | Manage services, technician profiles, and categories through RESTful APIs. |
+| 📅 **Booking Management** | Availability scheduling, conflict-free bookings, and booking lifecycle management. |
+| 💳 **Payment Integration** | Stripe and SSLCommerz integration for secure online payments. |
+| ⭐ **Review System** | Customers can submit ratings and reviews after completed services. |
+| 🔍 **Advanced Querying** | Search, filtering, sorting, and pagination for scalable API responses. |
+| ⚡ **Performance Optimized** | Efficient Prisma queries, reusable middleware, and clean modular architecture. |
+| 🛡 **Production-Ready Security** | Bcrypt password hashing, secure cookies, centralized error handling, and request validation. |
+| 📦 **Developer Experience** | TypeScript, Prisma ORM, PostgreSQL (Neon), Zod validation, and standardized API responses. |
 
 ---
 
-# 🛠 Tech Stack
+# 🛠️ Tech Stack
 
-## Backend
-
-- Node.js
-- Express.js
-- TypeScript
-
-## Database
-
-- PostgreSQL
-- Prisma ORM
-
-## Authentication
-
-- JWT
-- Bcrypt
-
-## Validation
-
-- Zod
-
-## Other Packages
-
-- Cookie Parser
-- CORS
-- Dotenv
-- HTTP Status
-- TSX
+| Category | Technologies |
+|----------|--------------|
+| **Runtime** | Node.js |
+| **Framework** | Express.js |
+| **Language** | TypeScript |
+| **Database** | PostgreSQL (Neon) |
+| **ORM** | Prisma ORM |
+| **Authentication** | JWT, Bcrypt.js |
+| **Authorization** | Role-Based Access Control (RBAC) |
+| **Payments** | SSLCommerz, Stripe |
+| **API Testing** | Postman |
+| **Development Tools** | TSX, TSUP, Prisma CLI |
+| **Environment Management** | Dotenv |
+| **HTTP Client** | Axios |
+| **Utilities** | Cookie Parser, CORS, UUID, HTTP Status |
+| **Database Driver** | pg, Prisma PostgreSQL Adapter |
 
 ---
 
@@ -162,11 +148,23 @@ fixitnow
 
 # 🔐 Authentication
 
-Protected routes require an Access Token.
+The API uses **JWT-based Authentication** with **Role-Based Access Control (RBAC)**.
+
+Protected endpoints accept the Access Token from either:
+
+- **Authorization Header**
 
 ```http
 Authorization: Bearer <access_token>
 ```
+
+- **HTTP-Only Cookie**
+
+```http
+Cookie: accessToken=<access_token>
+```
+
+All protected requests are validated for token authenticity, user status, and role-based permissions.
 
 ---
 
@@ -300,11 +298,11 @@ Most listing APIs support:
 ## Clone Repository
 
 ```bash
-git clone https://github.com/your-username/fixitnow-api.git
+https://github.com/Md-Sojib-Hossain-cse/FixItNow
 ```
 
 ```bash
-cd fixitnow-api
+cd FixItNow
 ```
 
 ---
@@ -317,24 +315,56 @@ npm install
 
 ---
 
-## Environment Variables
+## 🔧 Environment Variables
 
-Create a `.env` file.
+Create a `.env` file in the project root and configure the following variables:
 
 ```env
-DATABASE_URL=
-
-JWT_ACCESS_SECRET=
-JWT_REFRESH_SECRET=
-
-JWT_ACCESS_EXPIRED_IN=
-JWT_REFRESH_EXPIRED_IN=
-
-BCRYPT_SALT_ROUNDS=10
-
-NODE_ENV=development
+# =========================
+# Server Configuration
+# =========================
 PORT=5000
+
+# =========================
+# Database
+# =========================
+DATABASE_URL=your_postgresql_connection_string
+
+# =========================
+# Application URLs
+# =========================
+APP_URL=http://localhost:3000
+BACKEND_URL=http://localhost:5000
+
+# =========================
+# JWT Authentication
+# =========================
+JWT_ACCESS_SECRET=your_access_secret
+JWT_REFRESH_SECRET=your_refresh_secret
+
+JWT_ACCESS_EXPIRED_IN=7d
+JWT_REFRESH_EXPIRED_IN=30d
+
+# =========================
+# Password Encryption
+# =========================
+BCRYPT_SALT_ROUND=10
+
+# =========================
+# SSLCommerz Configuration
+# =========================
+SSL_COMMERZ_STORE_ID=your_store_id
+SSL_COMMERZ_STORE_PASSWORD=your_store_password
+
+# =========================
+# Payment Callback URLs
+# =========================
+PAYMENT_SUCCESS_URL=http://localhost:3000/payment/success
+PAYMENT_FAIL_URL=http://localhost:3000/payment/fail
+PAYMENT_CANCEL_URL=http://localhost:3000/payment/cancel
 ```
+
+> **Note:** Replace all placeholder values with your own configuration before running the application. Never commit your actual `.env` file to version control. Instead, commit an `.env.example` file containing placeholder values like the ones above.
 
 ---
 
@@ -412,32 +442,86 @@ npx prisma studio
 
 ---
 
-# 📄 Sample Success Response
+# 📄 API Response Format
+
+All API responses follow a standardized structure for consistency.
+
+---
+
+## ✅ Success Response
 
 ```json
 {
-    "success": true,
-    "message": "Users retrieved successfully.",
-    "meta": {
-        "page": 1,
-        "limit": 10,
-        "total": 25
-    },
-    "data": []
+  "success": true,
+  "statusCode": 200,
+  "message": "Operation completed successfully.",
+  "data": {}
+}
+```
+
+### Success Response with Pagination
+
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Users retrieved successfully.",
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "total": 50
+  },
+  "data": [
+    {
+      "id": "user_id",
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+  ]
 }
 ```
 
 ---
 
-# ❌ Sample Error Response
+## ❌ Error Response
 
 ```json
 {
-    "success": false,
-    "statusCode": 404,
-    "message": "Resource not found."
+  "success": false,
+  "statusCode": 400,
+  "message": "Something went wrong!",
+  "name": "Error",
+  "error": "Stack trace..."
 }
 ```
+
+---
+
+## ⚠️ Common Error Responses
+
+| Status Code | Description |
+|-------------|-------------|
+| **400** | Bad Request / Validation Error |
+| **401** | Unauthorized |
+| **403** | Forbidden |
+| **404** | Resource Not Found |
+| **409** | Conflict (Duplicate Resource) |
+| **500** | Internal Server Error |
+
+---
+
+## 🔍 Prisma Error Handling
+
+The API gracefully handles common Prisma errors with user-friendly messages.
+
+| Error Code | Description |
+|------------|-------------|
+| **P2002** | Duplicate key constraint violation |
+| **P2003** | Foreign key constraint failed |
+| **P2025** | Requested record not found |
+| **P1000** | Database authentication failed |
+| **P1001** | Unable to connect to the database |
+| **Validation Error** | Invalid field or data type supplied |
 
 ---
 
@@ -445,6 +529,7 @@ npx prisma studio
 
 **MD Sojib Hossain**
 
+- Team Lead - Software Engineer (MERN)
 - MERN Stack Developer
 - Backend Developer
 - TypeScript Enthusiast
