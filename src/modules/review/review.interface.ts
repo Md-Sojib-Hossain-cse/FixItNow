@@ -3,3 +3,12 @@ export type TCreateReview = {
     rating : number;
     comment : string;
 }
+
+export type TReviewQuery = {
+    rating ?: number;
+    searchTerm ?: string;
+    page ?: number;
+    limit ?: number;
+    sortBy ?: "rating" | "createdAt";
+    sortOrder ?: "asc" | "desc";
+}

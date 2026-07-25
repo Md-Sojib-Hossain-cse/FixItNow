@@ -1,7 +1,8 @@
 import { BookingStatus } from "../../../generated/prisma/enums"
+import type { ReviewsWhereInput } from "../../../generated/prisma/models"
 import AppError from "../../errors/appError"
 import { prisma } from "../../lib/prisma"
-import type { TCreateReview } from "./review.interface"
+import type { TCreateReview, TReviewQuery } from "./review.interface"
 import httpStatus from "http-status"
 
 const createReviewOnDB = async (userId : string, payload : TCreateReview) => {
@@ -31,7 +32,77 @@ const createReviewOnDB = async (userId : string, payload : TCreateReview) => {
     return result;
 }
 
+const getMyReviewsFromDB = async (userId : string , query : TReviewQuery) => {
+        const page = Number(query.page) || 1;
+        const limit = Number(query.limit) || 5;
+        const skip = (page -1) * limit
+        const sortBy = query.sortBy || "createdAt";
+        const sortOrder = query.sortOrder || "desc";
+        
+        
+        const andConditions : ReviewsWhereInput[] = []
+        const orConditions : ReviewsWhereInput[] =[]
+        
+        const serviceSearchableFields = [ "comment"]
+    
+        if(query.rating){
+            andConditions.push({
+                rating : {
+                    gte : Number(query.rating)
+                }
+            })
+        }
+    
+        if(query.searchTerm){
+            serviceSearchableFields.forEach((field : string) => {
+            orConditions.push({
+                [field] : {
+                    contains : query.searchTerm,
+                    mode : "insensitive"
+                }
+            })
+        })
+    
+        andConditions.push({
+            OR : orConditions
+        })
+        }
+    
+    
+        const [result, total] = await Promise.all([
+        prisma.reviews.findMany({
+            where: {
+                AND: andConditions,
+            },
+            include: {
+                booking : true
+            },
+            orderBy: {
+                [sortBy]: sortOrder,
+            },
+            skip,
+            take: limit,
+        }),
+        prisma.reviews.count({
+            where: {
+                AND: andConditions,
+            },
+        }),
+    ])
+    
+        return {
+        meta: {
+            page,
+            limit,
+            total
+        },
+        data: result
+    };
+    
+}
+
 
 export const reviewService = {
-    createReviewOnDB
+    createReviewOnDB,
+    getMyReviewsFromDB
 }

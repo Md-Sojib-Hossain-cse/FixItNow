@@ -120,7 +120,6 @@ const updateBookingOnDB = async (bookingId : string , payload : TAdminUpdateBook
     return booking;
 }
 
-
 const deleteBookingFromDB = async (bookingId : string) => {
     const booking = await prisma.bookings.update({
         where : {

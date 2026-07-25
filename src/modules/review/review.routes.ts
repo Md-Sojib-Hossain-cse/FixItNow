@@ -7,4 +7,6 @@ const router = Router()
 
 router.post("/" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN) , reviewController.createReview)
 
+router.get("/" , auth(Roles.CUSTOMER , Roles.TECHNICIAN , Roles.ADMIN) , reviewController.getMyReview)
+
 export const reviewRoutes = router
