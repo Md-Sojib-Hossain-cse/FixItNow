@@ -49,10 +49,7 @@ export const auth = (...roles : Roles[]) => {
 
         const user = await prisma.users.findUnique({
             where : {
-                id : id,
-                name : name,
-                email : email,
-                role : role
+                id : id
             }, 
             omit : {
                 password : true

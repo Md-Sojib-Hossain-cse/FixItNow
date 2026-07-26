@@ -185,10 +185,11 @@ All protected requests are validated for token authenticity, user status, and ro
 
 | Method | Endpoint |
 |---------|----------|
-| GET | /users |
-| GET | /users/:id |
-| PATCH | /users/:id |
-| DELETE | /users/:id |
+| GET | /admin/users |
+| GET | /admin/users/:id |
+| GET | /api/auth/me |
+| PATCH | /admin/users/:id |
+| DELETE | /admin/users/:id |
 
 ---
 
