@@ -1,0 +1,1845 @@
+{
+  "info": {
+    "_postman_id": "3e1ac2c9-7731-40cb-975e-321d0f87d909",
+    "name": "Fix It Now",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54048979",
+    "_collection_link": "https://go.postman.co/collection/54048979-3e1ac2c9-7731-40cb-975e-321d0f87d909?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "register user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\" : \"customer 2\",\r\n    \"email\" : \"customer2@gmail.com\",\r\n    \"password\" : \"customercustomer\",\r\n    \"role\" : \"CUSTOMER\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/auth/register",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\" : \"customer@gmail.com\",\r\n    \"password\" : \"customercustomer\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/auth/login",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get my user info",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{prodUrl}}/api/auth/me",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "refresh token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\" : \"technician@gmail.com\",\r\n    \"password\" : \"techniciantechnician\"\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/auth/refresh-token",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\" : \"technician@gmail.com\",\r\n    \"password\" : \"techniciantechnician\"\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/auth/logout",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "User",
+          "item": [
+            {
+              "name": "update user status",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\" : \"UNBANNED\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{prodUrl}}/api/admin/users/40e16a11-ce2a-4325-bcec-bae494fc62fb",
+                  "host": [
+                    "{{prodUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "users",
+                    "40e16a11-ce2a-4325-bcec-bae494fc62fb"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "update user delete status",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"isDeleted\" : false\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/admin/users/40e16a11-ce2a-4325-bcec-bae494fc62fb/delete",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "users",
+                    "40e16a11-ce2a-4325-bcec-bae494fc62fb",
+                    "delete"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get all users",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/admin/users?sortBy=createdAt&sortOrder=desc&page=1&limit=10&status=UNBANNED&isDeleted=false",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "searchTerm",
+                      "value": "customer",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "createdAt"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "status",
+                      "value": "UNBANNED",
+                      "description": "BANNED or UNBANNED"
+                    },
+                    {
+                      "key": "isDeleted",
+                      "value": "false",
+                      "description": "true or false"
+                    },
+                    {
+                      "key": "role",
+                      "value": "ADMIN",
+                      "description": "CUSTOMER,TECHNICIAN, ADMIN",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get single user",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/admin/users/b4174245-08b8-483d-a90b-82c72c4540ab",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "users",
+                    "b4174245-08b8-483d-a90b-82c72c4540ab"
+                  ],
+                  "query": [
+                    {
+                      "key": "isDeleted",
+                      "value": "true",
+                      "disabled": true
+                    },
+                    {
+                      "key": "searchTerm",
+                      "value": "le",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Category",
+          "item": [
+            {
+              "name": "create category",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\" : \"Driver\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{prodUrl}}/api/admin/categories",
+                  "host": [
+                    "{{prodUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get all category",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{prodUrl}}/api/admin/categories?sortBy=createdAt&sortOrder=desc",
+                  "host": [
+                    "{{prodUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "isDeleted",
+                      "value": "true",
+                      "disabled": true
+                    },
+                    {
+                      "key": "searchTerm",
+                      "value": "le",
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "page",
+                      "value": "2",
+                      "disabled": true
+                    },
+                    {
+                      "key": "limit",
+                      "value": "2",
+                      "disabled": true
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "createdAt"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "desc",
+                      "description": "asc , desc"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "delete category",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"isAvailable\" : true\r\n}"
+                },
+                "url": {
+                  "raw": "{{prodUrl}}/api/admin/categories/c1a3cf59-10c0-4889-9f39-50dace5a8eef",
+                  "host": [
+                    "{{prodUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "categories",
+                    "c1a3cf59-10c0-4889-9f39-50dace5a8eef"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Booking",
+          "item": [
+            {
+              "name": "get all bookings",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/admin/bookings?maxPrice=500&minPrice=100&startAfter=2026-07-23T08:00:00.000Z&endBefore=2026-07-24T12:00:00.000Z&searchTerm=al&limit=10&page=1&sortBy=totalPrice&sortOrder=desc",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "bookings"
+                  ],
+                  "query": [
+                    {
+                      "key": "maxPrice",
+                      "value": "500"
+                    },
+                    {
+                      "key": "minPrice",
+                      "value": "100"
+                    },
+                    {
+                      "key": "startAfter",
+                      "value": "2026-07-23T08:00:00.000Z"
+                    },
+                    {
+                      "key": "endBefore",
+                      "value": "2026-07-24T12:00:00.000Z"
+                    },
+                    {
+                      "key": "status",
+                      "value": "REQUESTED",
+                      "description": "REQUESTED , ACCEPTED,DECLINED\n    PAID\n    IN_PROGRESS\n    COMPLETED\n    CANCELLED",
+                      "disabled": true
+                    },
+                    {
+                      "key": "searchTerm",
+                      "value": "al"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "totalPrice",
+                      "description": "totalPrice , createdAt"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "desc",
+                      "description": "asc , desc"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "delete booking",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/admin/bookings/d03920b0-20db-4483-823c-b566a038a602",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "bookings",
+                    "d03920b0-20db-4483-823c-b566a038a602"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "REQUESTED",
+                      "description": "REQUESTED , ACCEPTED,DECLINED\n    PAID\n    IN_PROGRESS\n    COMPLETED\n    CANCELLED",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "update booking",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\" : \"PAID\",\r\n    \"address\" : \"Goaldi , khan bazar , Narayangonj\",\r\n    \"note\" : \"Somthing\",\r\n    \"isDeleted\" : false\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/admin/bookings/d03920b0-20db-4483-823c-b566a038a602",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "bookings",
+                    "d03920b0-20db-4483-823c-b566a038a602"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "update user info",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\" : \"Customer\",\r\n    \"phone\" : \"01906479901\",\r\n    \"address\" : \"goaldi khan bazar , sonargaon , narayangonj\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/user/update",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "user",
+                "update"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Technician Profile",
+      "item": [
+        {
+          "name": "update available status",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"isAvailable\" : true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/technician/status",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "technician",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update technician profile",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"bio\" : \"This is a test bio\",\r\n    \"skills\" : [\"plumber\"],\r\n    \"experienceYears\" : 1.2,\r\n    \"hourlyRate\" : 200,\r\n    \"location\" : \"Dhaka , Bangladesh\",\r\n    \"isAvailable\" : true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/technician/profile",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "technician",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all technician",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{prodUrl}}/api/technician?skills=plumber&experienceYears=1&minHourlyRate=100&maxHourlyRate=2000&averageRating=0&searchTerm=test&page=1&limit=10&sortBy=createdAt&sortOrder=asc",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "technician"
+              ],
+              "query": [
+                {
+                  "key": "skills",
+                  "value": "plumber"
+                },
+                {
+                  "key": "experienceYears",
+                  "value": "1"
+                },
+                {
+                  "key": "minHourlyRate",
+                  "value": "100"
+                },
+                {
+                  "key": "maxHourlyRate",
+                  "value": "2000"
+                },
+                {
+                  "key": "averageRating",
+                  "value": "0"
+                },
+                {
+                  "key": "searchTerm",
+                  "value": "test"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "description": "hourlyRate , averageRating , createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc",
+                  "description": "asc , desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single technician profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{prodUrl}}/api/technician/b9ffaea6-d817-4a3d-9248-6097ce75400f",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "technician",
+                "b9ffaea6-d817-4a3d-9248-6097ce75400f"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Service",
+      "item": [
+        {
+          "name": "create service",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"technicianProfileId\": \"b9ffaea6-d817-4a3d-9248-6097ce75400f\",\r\n  \"categoryId\": \"20cd52b4-cc34-4a2a-899b-49838906d2d0\",\r\n  \"title\": \"Electric meter setup\",\r\n  \"price\": 1500,\r\n  \"durationInHour\": 8,\r\n  \"description\": \"Professional air home painting  service.\",\r\n  \"type\" : \"OFFLINE\",\r\n  \"isActive\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/service",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "service"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update service",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Electrical Applience\",\r\n  \"price\": 160.00,\r\n  \"durationInHour\": 8,\r\n\"rating\" : 2.3,\r\n  \"description\": \"Professional electric management service.\",\r\n  \"isActive\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/service/f9746be5-5d4a-41b3-bba6-da8bca29512a",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "service",
+                "f9746be5-5d4a-41b3-bba6-da8bca29512a"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all services",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"technicianProfileId\": \"25778c2e-c186-4c3b-bab3-5f2f69b45108\",\r\n  \"categoryId\": \"27c15a88-764d-4816-8c79-784dadcab9ff\",\r\n  \"title\": \"Electrical appliece\",\r\n  \"price\": 1500.00,\r\n  \"durationInHour\": 8,\r\n  \"description\": \"Professional air home painting  service.\",\r\n  \"isActive\": true\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/service?category=Electrician&type=OFFLINE&rating=1&minPrice=100&maxPrice=2000&searchTerm=le&page=1&limit=10&sortBy=price&sortOrder=desc",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "service"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Electrician",
+                  "type": "text"
+                },
+                {
+                  "key": "type",
+                  "value": "OFFLINE",
+                  "description": "ONLINE, OFFLINE"
+                },
+                {
+                  "key": "rating",
+                  "value": "1"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "100"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "2000"
+                },
+                {
+                  "key": "searchTerm",
+                  "value": "le"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "price",
+                  "description": "price , title , createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "asc , desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete service",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"technicianProfileId\": \"25778c2e-c186-4c3b-bab3-5f2f69b45108\",\r\n  \"categoryId\": \"27c15a88-764d-4816-8c79-784dadcab9ff\",\r\n  \"title\": \"Electrical appliece\",\r\n  \"price\": 120,\r\n  \"durationInHour\": 8,\r\n  \"description\": \"Professional air home painting  service.\",\r\n  \"type\" : \"OFFLINE\",\r\n  \"isActive\": true\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/service/f9746be5-5d4a-41b3-bba6-da8bca29512a",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "service",
+                "f9746be5-5d4a-41b3-bba6-da8bca29512a"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get service  reviews",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\" : \"PAID\",\r\n    \"address\" : \"Goaldi , khan bazar , Narayangonj\",\r\n    \"note\" : \"Somthing\",\r\n    \"isDeleted\" : false\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/service/1360e059-e04e-4c6b-9d94-3124a7a30ce8/reviews",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "service",
+                "1360e059-e04e-4c6b-9d94-3124a7a30ce8",
+                "reviews"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "great",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single service",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\" : \"PAID\",\r\n    \"address\" : \"Goaldi , khan bazar , Narayangonj\",\r\n    \"note\" : \"Somthing\",\r\n    \"isDeleted\" : false\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/service/0df13a0a-b119-4e10-9cba-9a16bc084d92",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "service",
+                "0df13a0a-b119-4e10-9cba-9a16bc084d92"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "great",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "get all category",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/categories?searchTerm=le&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "categories"
+              ],
+              "query": [
+                {
+                  "key": "isDeleted",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "searchTerm",
+                  "value": "le"
+                },
+                {
+                  "key": "page",
+                  "value": "2",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "2",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "asc , desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Availability",
+      "item": [
+        {
+          "name": "create availability",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"technicianProfileId\": \"b9ffaea6-d817-4a3d-9248-6097ce75400f\",\r\n  \"day\": \"2026-07-24T00:00:00.000Z\",\r\n  \"startTime\": \"2026-07-24T20:01:00.000Z\",\r\n  \"endTime\": \"2026-07-24T22:00:00.000Z\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/availability",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "availability"
+              ],
+              "query": [
+                {
+                  "key": "isDeleted",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "2",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "2",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update availability slot",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"day\": \"2026-07-24T00:00:00.000Z\",\r\n  \"startTime\": \"2026-07-24T20:01:00.000Z\",\r\n  \"endTime\": \"2026-07-24T22:00:00.000Z\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/availability/80f10caf-3c78-4154-9a18-dd787b180682",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "availability",
+                "80f10caf-3c78-4154-9a18-dd787b180682"
+              ],
+              "query": [
+                {
+                  "key": "isDeleted",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "2",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "2",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete availability slot",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"technicianProfileId\": \"25778c2e-c186-4c3b-bab3-5f2f69b45108\",\r\n  \"day\": \"2026-07-24T00:00:00.000Z\",\r\n  \"startTime\": \"2026-07-24T14:00:00.000Z\",\r\n  \"endTime\": \"2026-07-24T18:00:00.000Z\"\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/availability/80f10caf-3c78-4154-9a18-dd787b180682",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "availability",
+                "80f10caf-3c78-4154-9a18-dd787b180682"
+              ],
+              "query": [
+                {
+                  "key": "isDeleted",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "2",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "2",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all availability",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"technicianProfileId\": \"25778c2e-c186-4c3b-bab3-5f2f69b45108\",\r\n  \"day\": \"2026-07-24T00:00:00.000Z\",\r\n  \"startTime\": \"2026-07-24T14:00:00.000Z\",\r\n  \"endTime\": \"2026-07-24T18:00:00.000Z\"\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/availability?day=2026-07-24T17:00:00Z&sortBy=startTime&sortOrder=asc&page=1&limit=5&=",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "availability"
+              ],
+              "query": [
+                {
+                  "key": "day",
+                  "value": "2026-07-24T17:00:00Z"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "startTime",
+                  "description": "day , startTime , endTime , createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc",
+                  "description": "asc , desc"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                },
+                {
+                  "key": "",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single availability",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"technicianProfileId\": \"25778c2e-c186-4c3b-bab3-5f2f69b45108\",\r\n  \"day\": \"2026-07-24T00:00:00.000Z\",\r\n  \"startTime\": \"2026-07-24T14:00:00.000Z\",\r\n  \"endTime\": \"2026-07-24T18:00:00.000Z\"\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/availability/434ae9c0-6b56-4c0a-945a-d76e717d07fd",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "availability",
+                "434ae9c0-6b56-4c0a-945a-d76e717d07fd"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Booking",
+      "item": [
+        {
+          "name": "create booking",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"customerId\": \"0fa8db6b-a94f-45bc-8cde-286974a29a33\",\r\n  \"serviceId\": \"1360e059-e04e-4c6b-9d94-3124a7a30ce8\",\r\n  \"availabilityId\": \"76c29fbc-12cd-47b6-bd75-2c1a6ad06375\",\r\n  \"address\" : \"Goaldi , Sonargaon , Narayangonj\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/bookings",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cancel booking",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"customerId\": \"4cac3ed0-0153-4651-a93d-93a3b6e2b347\",\r\n  \"serviceId\": \"0df13a0a-b119-4e10-9cba-9a16bc084d92\",\r\n  \"availabilityId\": \"f7418f5b-f93b-44ba-ad03-2a5ef7bd69de\",\r\n  \"address\" : \"Goaldi , Sonargaon , Narayangonj\"\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/bookings/d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3/cancel",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "reject booking",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"customerId\": \"4cac3ed0-0153-4651-a93d-93a3b6e2b347\",\r\n  \"serviceId\": \"0df13a0a-b119-4e10-9cba-9a16bc084d92\",\r\n  \"availabilityId\": \"f7418f5b-f93b-44ba-ad03-2a5ef7bd69de\",\r\n  \"address\" : \"Goaldi , Sonargaon , Narayangonj\"\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/bookings/d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3/reject",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3",
+                "reject"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "accept booking",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"customerId\": \"4cac3ed0-0153-4651-a93d-93a3b6e2b347\",\r\n  \"serviceId\": \"0df13a0a-b119-4e10-9cba-9a16bc084d92\",\r\n  \"availabilityId\": \"f7418f5b-f93b-44ba-ad03-2a5ef7bd69de\",\r\n  \"address\" : \"Goaldi , Sonargaon , Narayangonj\"\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/bookings/d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3/accept",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3",
+                "accept"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "in progress booking",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"customerId\": \"4cac3ed0-0153-4651-a93d-93a3b6e2b347\",\r\n  \"serviceId\": \"0df13a0a-b119-4e10-9cba-9a16bc084d92\",\r\n  \"availabilityId\": \"f7418f5b-f93b-44ba-ad03-2a5ef7bd69de\",\r\n  \"address\" : \"Goaldi , Sonargaon , Narayangonj\"\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/bookings/d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3/in-progress",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3",
+                "in-progress"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "complete booking",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"customerId\": \"4cac3ed0-0153-4651-a93d-93a3b6e2b347\",\r\n  \"serviceId\": \"0df13a0a-b119-4e10-9cba-9a16bc084d92\",\r\n  \"availabilityId\": \"f7418f5b-f93b-44ba-ad03-2a5ef7bd69de\",\r\n  \"address\" : \"Goaldi , Sonargaon , Narayangonj\"\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/bookings/d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3/complete",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3",
+                "complete"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get my bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{prodUrl}}/api/bookings/my-bookings?maxPrice=2000&minPrice=50&limit=10&page=1&sortBy=totalPrice&sortOrder=asc",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "my-bookings"
+              ],
+              "query": [
+                {
+                  "key": "maxPrice",
+                  "value": "2000"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "50"
+                },
+                {
+                  "key": "startAfter",
+                  "value": "2026-07-23T08:00:00.000Z",
+                  "disabled": true
+                },
+                {
+                  "key": "endBefore",
+                  "value": "2026-07-24T12:00:00.000Z",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "REQUESTED",
+                  "description": "REQUESTED , ACCEPTED,DECLINED\n    PAID\n    IN_PROGRESS\n    COMPLETED\n    CANCELLED",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "searchTerm",
+                  "value": "sonargaon",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "totalPrice",
+                  "description": "totalPrice , createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc",
+                  "description": "asc , desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get assigned bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{prodUrl}}/api/bookings/assigned",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "assigned"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "REQUESTED",
+                  "description": "REQUESTED , ACCEPTED,DECLINED\n    PAID\n    IN_PROGRESS\n    COMPLETED\n    CANCELLED",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single booking",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{prodUrl}}/api/bookings/d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "bookings",
+                "d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "REQUESTED",
+                  "description": "REQUESTED , ACCEPTED,DECLINED\n    PAID\n    IN_PROGRESS\n    COMPLETED\n    CANCELLED",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "create review",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"bookingId\" : \"d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3\",\r\n    \"comment\" : \"Great Servic 2\",\r\n    \"rating\" : 2.5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/reviews",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "reviews"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get my reviews",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\" : \"PAID\",\r\n    \"address\" : \"Goaldi , khan bazar , Narayangonj\",\r\n    \"note\" : \"Somthing\",\r\n    \"isDeleted\" : false\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/reviews?rating=2&page=1&limit=10&sortBy=rating&sortOrder=desc",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "reviews"
+              ],
+              "query": [
+                {
+                  "key": "rating",
+                  "value": "2"
+                },
+                {
+                  "key": "searchTerm",
+                  "value": "great",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "rating",
+                  "description": "rating , createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "asc , desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single review",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\" : \"PAID\",\r\n    \"address\" : \"Goaldi , khan bazar , Narayangonj\",\r\n    \"note\" : \"Somthing\",\r\n    \"isDeleted\" : false\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/reviews/c0a7ce63-77ed-4f0d-bf01-eb5d36f5b1a1",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "reviews",
+                "c0a7ce63-77ed-4f0d-bf01-eb5d36f5b1a1"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "great",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update review",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"comment\" : \"updated review\",\r\n    \"rating\" : 4.5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/reviews/c0a7ce63-77ed-4f0d-bf01-eb5d36f5b1a1",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "reviews",
+                "c0a7ce63-77ed-4f0d-bf01-eb5d36f5b1a1"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "great",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete review",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"comment\" : \"updated review\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/reviews/aed3d2d8-9635-4e6d-a84a-f71dd80b678a",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "reviews",
+                "aed3d2d8-9635-4e6d-a84a-f71dd80b678a"
+              ],
+              "query": [
+                {
+                  "key": "searchTerm",
+                  "value": "great",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "initiate payment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"bookingId\" : \"d03920b0-20db-4483-823c-b566a038a602\",\r\n    \"comment\" : \"Great Service\",\r\n    \"rating\" : 4.5\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/payments/d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3/initiate",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "d8b4bb71-7133-4bfa-bd8d-5cf5235f52c3",
+                "initiate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get my payments",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"bookingId\" : \"d03920b0-20db-4483-823c-b566a038a602\",\r\n    \"comment\" : \"Great Service\",\r\n    \"rating\" : 4.5\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/payments/my-payments?minAmount=100&maxAmount=2000&provider=SSLCOMMERZ&page=1&limit=10&sortBy=paidAt&sortOrder=desc",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "my-payments"
+              ],
+              "query": [
+                {
+                  "key": "minAmount",
+                  "value": "100"
+                },
+                {
+                  "key": "maxAmount",
+                  "value": "2000"
+                },
+                {
+                  "key": "provider",
+                  "value": "SSLCOMMERZ",
+                  "description": "SSLCOMMERZ , STRIPE"
+                },
+                {
+                  "key": "paidAfter",
+                  "value": "2026-07-24T08:27:25.754Z",
+                  "disabled": true
+                },
+                {
+                  "key": "paidBefore",
+                  "value": "2026-07-26T08:26:25.754Z",
+                  "disabled": true
+                },
+                {
+                  "key": "searchTerm",
+                  "value": "a",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "paidAt",
+                  "description": "paidAt , amount , createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single payment(own)",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"bookingId\" : \"d03920b0-20db-4483-823c-b566a038a602\",\r\n    \"comment\" : \"Great Service\",\r\n    \"rating\" : 4.5\r\n}"
+            },
+            "url": {
+              "raw": "{{prodUrl}}/api/payments/47b035e5-8e9c-4104-bd7d-ac5eea54288f",
+              "host": [
+                "{{prodUrl}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "47b035e5-8e9c-4104-bd7d-ac5eea54288f"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "root",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\" : \"abc1\",\r\n    \"email\" : \"abc7@gmail.com\",\r\n    \"password\" : \"abc1233\",\r\n    \"profilePhoto\" : \"https://drawsql.app/teams/md-sojib/diagrams/prisma-press-erd\"\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5000",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000"
+        }
+      },
+      "response": []
+    }
+  ]
+}
