@@ -120,6 +120,7 @@ const loginUserFromDB = async (payload : TLoginUser) => {
         throw new AppError(httpStatus.UNAUTHORIZED , "Wrong credentials!")
     }
 
+
     const jwtPayload : TJwtPayload = {
         id : isUserExists.id,
         name : isUserExists.name,

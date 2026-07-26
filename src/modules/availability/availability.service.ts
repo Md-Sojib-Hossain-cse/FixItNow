@@ -5,18 +5,18 @@ import type { TAvailabilityQuery, TCreateAvailability, TUpdateAvailability } fro
 import type { AvailabilityWhereInput } from "../../../generated/prisma/models";
 
 const createAvailabilityOnDB = async (userId : string, payload : TCreateAvailability)=> {
-    const day = payload.day;
-    const startTime = payload.startTime;
-    const endTime = payload.endTime;
+    const day = new Date(payload.day);
+    const startTime = new Date(payload.startTime);
+    const endTime = new Date(payload.endTime);
 
     if(!payload.day || !payload.startTime || !payload.endTime || !payload.technicianProfileId){
         throw new AppError(httpStatus.BAD_REQUEST , "Please provide all required field!")
     }
 
     const isSameDay = (a: Date, b: Date) =>
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate();
+        a.getUTCFullYear() === b.getUTCFullYear() &&
+        a.getUTCMonth() === b.getUTCMonth() &&
+        a.getUTCDate() === b.getUTCDate();
 
     if (
     !isSameDay(day, startTime) ||
@@ -102,9 +102,9 @@ const updateAvailabilityOnDB = async (userId : string , availabilityId : string 
 
 
     const isSameDay = (a: Date, b: Date) =>
-        a.getFullYear() === b.getFullYear() &&
-        a.getMonth() === b.getMonth() &&
-        a.getDate() === b.getDate();
+        a.getUTCFullYear() === b.getUTCFullYear() &&
+        a.getUTCMonth() === b.getUTCMonth() &&
+        a.getUTCDate() === b.getUTCDate();
 
     if (
         !isSameDay(day, startTime) ||
@@ -255,6 +255,10 @@ const getSingleAvailabilityFromDB = async(id : string) => {
             technicianProfile : true
         }
     })
+
+    if(!result){
+        throw new AppError(httpStatus.NOT_FOUND , "Availability slot not found!")
+    }
 
     return result;
 }

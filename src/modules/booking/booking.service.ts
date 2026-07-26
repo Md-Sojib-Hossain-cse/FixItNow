@@ -436,7 +436,16 @@ const getSingleBooking = async (userId : string , bookingId : string) => {
     const booking = await prisma.bookings.findUnique({
         where : {
             id : bookingId,
-            customerId : userId
+            OR: [
+                {customerId: userId},
+                {
+                    service: {
+                        technicianProfile: {
+                            userId,
+                        },
+                    },
+                },
+                ],
         },
         include : {
             customer : {

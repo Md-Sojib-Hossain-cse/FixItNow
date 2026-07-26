@@ -174,10 +174,10 @@ All protected requests are validated for token authenticity, user status, and ro
 
 | Method | Endpoint |
 |---------|----------|
-| POST | /auth/register |
-| POST | /auth/login |
-| POST | /auth/refresh-token |
-| POST | /auth/logout |
+| POST | /api/auth/register |
+| POST | /api/auth/login |
+| POST | /api/auth/refresh-token |
+| POST | /api/auth/logout |
 
 ---
 
@@ -185,11 +185,11 @@ All protected requests are validated for token authenticity, user status, and ro
 
 | Method | Endpoint |
 |---------|----------|
-| GET | /admin/users |
-| GET | /admin/users/:id |
+| GET | /api/admin/users |
+| GET | /api/admin/users/:id |
 | GET | /api/auth/me |
-| PATCH | /admin/users/:id |
-| DELETE | /admin/users/:id |
+| PATCH | /api/admin/users/:id |
+| DELETE | /api/admin/users/:id |
 
 ---
 
@@ -197,11 +197,10 @@ All protected requests are validated for token authenticity, user status, and ro
 
 | Method | Endpoint |
 |---------|----------|
-| POST | /categories |
-| GET | /categories |
-| GET | /categories/:id |
-| PATCH | /categories/:id |
-| DELETE | /categories/:id |
+| POST | /api/admin/categories |
+| GET | /api/admin/categories |
+| GET | /api/categories |
+| DELETE | /api/admin/categories/:id |
 
 ---
 
@@ -209,10 +208,10 @@ All protected requests are validated for token authenticity, user status, and ro
 
 | Method | Endpoint |
 |---------|----------|
-| POST | /technicians |
-| GET | /technicians |
-| GET | /technicians/:id |
-| PATCH | /technicians/:id |
+| PATCH | /api/technician/status |
+| GET | /api/technician |
+| GET | /api/technician/:id |
+| PATCH | /api/technician/profile |
 
 ---
 
@@ -220,11 +219,12 @@ All protected requests are validated for token authenticity, user status, and ro
 
 | Method | Endpoint |
 |---------|----------|
-| POST | /services |
-| GET | /services |
-| GET | /services/:id |
-| PATCH | /services/:id |
-| DELETE | /services/:id |
+| POST | /api/services |
+| GET | /api/services |
+| GET | /api/services/:id |
+| GET | /api/services/:id/reviews |
+| PATCH | /api/services/:id |
+| DELETE | /api/services/:id |
 
 ---
 
@@ -232,10 +232,11 @@ All protected requests are validated for token authenticity, user status, and ro
 
 | Method | Endpoint |
 |---------|----------|
-| POST | /availability |
-| GET | /availability |
-| PATCH | /availability/:id |
-| DELETE | /availability/:id |
+| POST | /api/availability |
+| GET | /api/availability |
+| GET | /api/availability/:id |
+| PATCH | /api/availability/:id |
+| DELETE | /api/availability/:id |
 
 ---
 
@@ -243,22 +244,37 @@ All protected requests are validated for token authenticity, user status, and ro
 
 | Method | Endpoint |
 |---------|----------|
-| POST | /bookings |
-| GET | /bookings |
-| GET | /bookings/:id |
-| PATCH | /bookings/:id |
+| POST | /api/bookings |
+| GET | /api/bookings/my-bookings |
+| GET | /api/bookings/assigned |
+| GET | /api/bookings/:id |
+| PATCH | /api/bookings/:id/cancel |
+| PATCH | /api/bookings/:id/reject |
+| PATCH | /api/bookings/:id/accept |
+| PATCH | /api/bookings/:id/in-progress |
+| PATCH | /api/bookings/:id/complete |
 | DELETE | /bookings/:id |
 
 ---
 
+## Payments
+
+| Method | Endpoint |
+|---------|----------|
+| POST | /api/payments/:bookingId/initiate |
+| GET | /api/payments/my-payments |
+| GET | /api/payments/:id |
+
+---
 ## Reviews
 
 | Method | Endpoint |
 |---------|----------|
-| POST | /reviews |
-| GET | /reviews |
-| PATCH | /reviews/:id |
-| DELETE | /reviews/:id |
+| POST | /api/reviews |
+| GET | /api/reviews |
+| GET | /api/reviews/:id |
+| PATCH | /api/reviews/:id |
+| DELETE | /api/reviews/:id |
 
 ---
 

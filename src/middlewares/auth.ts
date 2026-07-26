@@ -41,10 +41,14 @@ export const auth = (...roles : Roles[]) => {
 
         const {email , name , id , role} = verifyToken.data
 
+        console.log(verifyToken)
+
 
         if(roles.length && !roles.includes(role)){
             throw new AppError(httpStatus.FORBIDDEN, "Forbidden!")
         }
+
+        console.log(role)
 
 
         const user = await prisma.users.findUnique({

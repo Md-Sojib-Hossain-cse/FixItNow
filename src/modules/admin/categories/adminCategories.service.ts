@@ -115,6 +115,10 @@ const deleteCategoryFromDB = async(categoryId : string) => {
         }
     })
 
+    if(!result){
+        throw new AppError(httpStatus.NOT_FOUND , "Category you're trying to delete not found!")
+    }
+
     return result;
 }
 

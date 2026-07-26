@@ -10,7 +10,6 @@ const updateOwnTechnicianProfileOnDB = async (userId : string , payload : TUpdat
         data : payload,
         include : {
             availability : true,
-            reviews : true,
             services : true,
             user : true
         }
@@ -29,8 +28,7 @@ const updateAvailableStatusOnDB = async(userId : string , payload : TUpdateAvail
         },
         include : {
             availability : true,
-            reviews : true,
-            services : true,
+            services : true
         }
     })
 
@@ -107,14 +105,6 @@ const getAllTechnicianFromDB = async (query : TTechnicianQuery) => {
             },
             include: {
                 availability : true,
-                reviews : {
-                    select : {
-                        comment : true,
-                        customer : true,
-                        rating : true,
-                        createdAt : true
-                    }
-                },
                 services : true,
                 user : {
                     select : {
@@ -162,9 +152,11 @@ const getTechnicianProfileWithReviewsFromDB = async (id : string) => {
             booking : {
                  service : {
                     technicianProfileId : id,
-                    createdAt : "desc"
                  },
             }
+        },
+        orderBy : {
+            createdAt : "desc"
         }
     })
 
